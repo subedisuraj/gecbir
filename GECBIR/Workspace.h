@@ -13,7 +13,7 @@ using std::cout;
 class Workspace
 {
 public:
-	string wsDirecroryPath;
+	string galleryPath;
 	list<string> imagePaths;
 
 public:

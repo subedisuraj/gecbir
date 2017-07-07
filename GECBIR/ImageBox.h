@@ -10,10 +10,10 @@ using std::cin;
 using std::cout;
 
 
+namespace GECBIR{
 
 
-
-class ImageFile
+class ImageBox
 {
 public:
 	string imageFilePath;
@@ -21,7 +21,8 @@ public:
 	string imageFileName;
 
 public:
-	ImageFile(void);
-	~ImageFile(void);
+	ImageBox(void);
+	~ImageBox(void);
 };
 
+}

@@ -5,7 +5,7 @@
     <ClInclude Include="Workspace.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="ImageFile.h">
+    <ClInclude Include="ImageBox.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="Workspace.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="ImageFile.cpp">
+    <ClCompile Include="ImageBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>

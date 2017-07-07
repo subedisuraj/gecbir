@@ -3,6 +3,7 @@
 
 Workspace::Workspace(void)
 {
+	galleryPath = "C://Gallery//MyPictures";
 }
 
 
