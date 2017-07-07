@@ -385,30 +385,81 @@ namespace GECBIR {
 
 		void LoadImagesDisplayPanel()
 		{
-		//	flowImagesDisplayPanel = gcnew FlowLayoutPanel();
-		//	flowImagesDisplayPanel->BorderStyle = BorderStyle::FixedSingle;
-		//	flowImagesDisplayPanel->Size = displayPanel->Size;
-		////	flowImagesDisplayPanel->MinimumSize = System::Drawing::Size( 200, 200 );
-		////	flowImagesDisplayPanel->Anchor = displayPanel->Anchor;
-		//	flowImagesDisplayPanel->AutoScroll = TRUE;
-		//	flowImagesDisplayPanel->AutoScrollMinSize = System::Drawing::Size(200,200 );
-		////	flowImagesDisplayPanel->AutoScrollMinSize = flowImagesDisplayPanel->GetPreferredSize(new Size(1, 1));
-		//	//flowImagesDisplayPanel->AutoScrollMinSize = displayPanel->Size;
-		//	flowImagesDisplayPanel->FlowDirection = FlowDirection::TopDown ;
-		//	flowImagesDisplayPanel->WrapContents = FALSE;
-		//	flowImagesDisplayPanel->Anchor = displayPanel->Anchor;
-		////	flowImagesDisplayPanel->Dock = DockStyle::Fill;
-		//	//flowImagesDisplayPanel->AutoSize = TRUE;
-		////	flowImagesDisplayPanel->AutoSizeMode =  AutoSizeMode->GrowAndShrink;
 			
-		
-			for(int i =0; i<=100; i++)
-			{
-				Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
-				displayPanel->Controls->Add(galleryPath);
-			}
-			//this->displayPanel->Controls->Add(imageDisplayGroup);
+			Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
+			displayPanel->Controls->Add(galleryPath);
 
+			
+
+
+
+
+			Label^ galleryPath1 = gcnew Label();
+			galleryPath1->BorderStyle = BorderStyle::Fixed3D;
+			galleryPath1->AutoSize = false;
+			galleryPath1-> Width = displayPanel->Width;
+			galleryPath1-> Height = 2; 
+			displayPanel->Controls->Add(galleryPath1);
+
+
+			flowImagesDisplayPanel = gcnew FlowLayoutPanel();
+			flowImagesDisplayPanel->Width = displayPanel -> Width;
+			flowImagesDisplayPanel->AutoSize = true;
+			flowImagesDisplayPanel->FlowDirection = FlowDirection::LeftToRight;
+
+/*
+			displayPanel->FlowDirection = FlowDirection::TopDown;
+			Label^ galleryPath2 = createLabel(currentWorkspace->galleryPath);
+
+			
+			displayPanel->SetFlowBreak(galleryPath2, TRUE);
+			displayPanel->Controls->Add(galleryPath2);
+	
+
+			
+
+			Label^ galleryPath3 = createLabel(currentWorkspace->galleryPath);
+			displayPanel->Controls->Add(galleryPath);
+
+			displayPanel->FlowDirection = FlowDirection::LeftToRight;
+			displayPanel->SetFlowBreak(galleryPath3, FALSE);
+*/
+//			displayPanel->FlowDirection = FlowDirection::TopDown;
+			/*Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
+			displayPanel->SetFlowBreak(galleryPath, TRUE);
+			displayPanel->Controls->Add(galleryPath);
+			displayPanel->SetFlowBreak(galleryPath, FALSE);
+
+			Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
+			displayPanel->SetFlowBreak(galleryPath, TRUE);
+			displayPanel->Controls->Add(galleryPath);
+			displayPanel->SetFlowBreak(galleryPath, FALSE);
+*/
+			
+			for(int m =0; m<2; m++)
+			{
+			int NUM_OF_IMAGES = currentWorkspace->imagePaths.size();
+			for(int i =0; i < NUM_OF_IMAGES; i++)
+			{
+				
+				PictureBox^ pb = gcnew PictureBox();
+				int imageSize = (displayPanel -> Width)/4.2;
+				pb->Size = System::Drawing::Size(imageSize, imageSize);
+				pb->SizeMode = PictureBoxSizeMode::StretchImage;
+				pb->ImageLocation = getManagedString( currentWorkspace->imagePaths[i]) ; 
+				pb->SizeMode = PictureBoxSizeMode::Normal;
+				flowImagesDisplayPanel->Controls->Add(pb);
+				
+
+			}
+			}
+			
+			displayPanel->Controls->Add(flowImagesDisplayPanel);
+		}
+
+		String^ getManagedString(string unmanagedString)
+		{
+			return msclr::interop::marshal_as<System::String^>(unmanagedString);
 		}
 
 		Label^ createLabel(string labelString)

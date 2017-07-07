@@ -3,9 +3,9 @@
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include <list>
+#include <vector>
 
-using std::list;
+using std::vector;
 using std::string;
 using std::cin;
 using std::cout;
@@ -14,7 +14,7 @@ class Workspace
 {
 public:
 	string galleryPath;
-	list<string> imagePaths;
+	vector<string> imagePaths;
 
 public:
 	Workspace(void);
