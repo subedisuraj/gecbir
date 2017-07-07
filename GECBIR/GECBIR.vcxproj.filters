@@ -2,6 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClInclude Include="mainWindow.h" />
+    <ClInclude Include="Workspace.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageFile.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
@@ -22,6 +28,12 @@
   <ItemGroup>
     <ClCompile Include="mainWindow.cpp">
       <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Workspace.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageFile.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
