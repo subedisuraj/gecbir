@@ -8,6 +8,7 @@
     <ClInclude Include="ImageBox.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
@@ -35,5 +36,6 @@
     <ClCompile Include="ImageBox.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="Settings.cpp" />
   </ItemGroup>
 </Project>

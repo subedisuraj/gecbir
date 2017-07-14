@@ -19,5 +19,6 @@ public:
 public:
 	Workspace(void);
 	~Workspace(void);
+	int GetFileList(const char *searchkey, std::vector<std::string> &list);
 };
 

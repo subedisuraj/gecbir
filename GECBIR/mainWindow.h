@@ -2,7 +2,7 @@
 
 #include "Workspace.h"
 #include <msclr\marshal_cppstd.h>
-
+#include "Settings.h"
 
 
 namespace GECBIR {
@@ -214,6 +214,7 @@ namespace GECBIR {
 			this->settingsBtn->Size = System::Drawing::Size(52, 51);
 			this->settingsBtn->TabIndex = 10;
 			this->settingsBtn->UseVisualStyleBackColor = true;
+			this->settingsBtn->Click += gcnew System::EventHandler(this, &mainWindow::settingsBtn_Click);
 			// 
 			// imageBtnLabel
 			// 
@@ -353,7 +354,7 @@ namespace GECBIR {
 		enum class modes {IMAGES_MODE,FOLDERS_MODE,DUPLICATES_MODE,RELATED_MODE}; 
 		modes currentmode; 
 		Workspace * currentWorkspace; 
-
+		Settings^ settingsWindow ;
 
 
 
@@ -365,7 +366,7 @@ namespace GECBIR {
 			InitializeComponent();
 			InitializeSettings();
 			InitializeDisplayPanel();
-			
+			settingsWindow = gcnew Settings();
 			//TODO: Add the constructor code here
 			//
 		}
@@ -521,6 +522,13 @@ namespace GECBIR {
 	private: System::Void mainWindow_ResizeEnd(System::Object^  sender, System::EventArgs^  e) {
 			//	 flowImagesDisplayPanel->Size = displayPanel->Size;
 			 }
+private: System::Void settingsBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+
+			 
+			 
+             settingsWindow->Show();
+          
+		 }
 };
 
 }

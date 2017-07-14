@@ -11,7 +11,6 @@ namespace GECBIR {
 		Application::EnableVisualStyles();
 		Application::SetCompatibleTextRenderingDefault(false);
 		mainWindow form;
-	
 		Application::Run(%form);
 	}
 }
