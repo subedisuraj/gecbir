@@ -1,10 +1,10 @@
 #include "Workspace.h"
 #include <Windows.h>
 #include <vector>
-#include <boost/filesystem.hpp>
+
 
 using namespace std;
-using namespace boost::filesystem;
+
 
 
 using std::vector;
@@ -40,7 +40,7 @@ Workspace::Workspace(void)
 	
 	string  searchString = galleryPath ; 
 	const char *cstr = searchString.c_str();
-	GetFileList(cstr,imagePaths);
+
 	int a = 0;
 
 
@@ -49,26 +49,7 @@ Workspace::Workspace(void)
 
 }
 
-int Workspace::GetFileList(const char *searchkey, std::vector<std::string> &list)
-{
-    // list all files in current directory.
-    //You could put any file path in here, e.g. "/home/me/mwah" to list that directory
-	path p (searchkey);
 
-    directory_iterator end_itr;
-
-    // cycle through the directory
-    for (directory_iterator itr(p); itr != end_itr; ++itr)
-    {
-        // If it's not a directory, list it. If you want to list directories too, just remove this check.
-        if (is_regular_file(itr->path())) {
-            // assign current file name to current_file and echo it out to the console.
-            string current_file = itr->path().string();
-            cout << current_file << endl;
-        }
-    }
-	return 0;
-}
 
 
 //int Workspace::GetFileList(const char *searchkey, std::vector<std::string> &list)
