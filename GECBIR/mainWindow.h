@@ -406,7 +406,8 @@ namespace GECBIR {
 
 			for(int m =0; m<2; m++)
 			{
-			int NUM_OF_IMAGES = currentWorkspace->imagePaths.size();
+			//int NUM_OF_IMAGES = currentWorkspace->imagePaths.size();
+			int NUM_OF_IMAGES = 0;
 			for(int i =0; i < NUM_OF_IMAGES; i++)
 			{
 				
@@ -414,7 +415,7 @@ namespace GECBIR {
 				int imageSize = (displayPanel -> Width)/4.2;
 				pb->Size = System::Drawing::Size(imageSize, imageSize);
 				pb->SizeMode = PictureBoxSizeMode::StretchImage;
-				pb->ImageLocation = getManagedString( currentWorkspace->imagePaths[i]) ; 
+				pb->ImageLocation = getManagedString( "hello") ; 
 				pb->SizeMode = PictureBoxSizeMode::Normal;
 				flowImagesDisplayPanel->Controls->Add(pb);
 				
