@@ -390,11 +390,6 @@ namespace GECBIR {
 			Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
 			displayPanel->Controls->Add(galleryPath);
 
-			
-
-
-
-
 			Label^ galleryPath1 = gcnew Label();
 			galleryPath1->BorderStyle = BorderStyle::Fixed3D;
 			galleryPath1->AutoSize = false;
@@ -408,35 +403,7 @@ namespace GECBIR {
 			flowImagesDisplayPanel->AutoSize = true;
 			flowImagesDisplayPanel->FlowDirection = FlowDirection::LeftToRight;
 
-/*
-			displayPanel->FlowDirection = FlowDirection::TopDown;
-			Label^ galleryPath2 = createLabel(currentWorkspace->galleryPath);
 
-			
-			displayPanel->SetFlowBreak(galleryPath2, TRUE);
-			displayPanel->Controls->Add(galleryPath2);
-	
-
-			
-
-			Label^ galleryPath3 = createLabel(currentWorkspace->galleryPath);
-			displayPanel->Controls->Add(galleryPath);
-
-			displayPanel->FlowDirection = FlowDirection::LeftToRight;
-			displayPanel->SetFlowBreak(galleryPath3, FALSE);
-*/
-//			displayPanel->FlowDirection = FlowDirection::TopDown;
-			/*Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
-			displayPanel->SetFlowBreak(galleryPath, TRUE);
-			displayPanel->Controls->Add(galleryPath);
-			displayPanel->SetFlowBreak(galleryPath, FALSE);
-
-			Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
-			displayPanel->SetFlowBreak(galleryPath, TRUE);
-			displayPanel->Controls->Add(galleryPath);
-			displayPanel->SetFlowBreak(galleryPath, FALSE);
-*/
-			
 			for(int m =0; m<2; m++)
 			{
 			int NUM_OF_IMAGES = currentWorkspace->imagePaths.size();

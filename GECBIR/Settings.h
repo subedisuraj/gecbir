@@ -43,8 +43,9 @@ namespace GECBIR {
 
 	private: System::Windows::Forms::Label^  SettingsPrompt;
 	private: System::Windows::Forms::TextBox^  galleryPath;
+	private: System::Windows::Forms::Button^  browseBtn;
 
-	private: System::Windows::Forms::Button^  button2;
+
 	private: System::Windows::Forms::FolderBrowserDialog^  folderBrowserDialog1;
 
 	protected: 
@@ -68,7 +69,7 @@ namespace GECBIR {
 			this->cancelbtn = (gcnew System::Windows::Forms::Button());
 			this->SettingsPrompt = (gcnew System::Windows::Forms::Label());
 			this->galleryPath = (gcnew System::Windows::Forms::TextBox());
-			this->button2 = (gcnew System::Windows::Forms::Button());
+			this->browseBtn = (gcnew System::Windows::Forms::Button());
 			this->folderBrowserDialog1 = (gcnew System::Windows::Forms::FolderBrowserDialog());
 			this->SuspendLayout();
 			// 
@@ -80,7 +81,7 @@ namespace GECBIR {
 			this->Okbtn->TabIndex = 0;
 			this->Okbtn->Text = L"OK";
 			this->Okbtn->UseVisualStyleBackColor = true;
-			this->Okbtn->Click += gcnew System::EventHandler(this, &Settings::button1_Click);
+			this->Okbtn->Click += gcnew System::EventHandler(this, &Settings::okBtn_Click);
 			// 
 			// cancelbtn
 			// 
@@ -109,22 +110,22 @@ namespace GECBIR {
 			this->galleryPath->Size = System::Drawing::Size(185, 20);
 			this->galleryPath->TabIndex = 3;
 			// 
-			// button2
+			// browseBtn
 			// 
-			this->button2->Location = System::Drawing::Point(253, 55);
-			this->button2->Name = L"button2";
-			this->button2->Size = System::Drawing::Size(75, 23);
-			this->button2->TabIndex = 4;
-			this->button2->Text = L"Browse";
-			this->button2->UseVisualStyleBackColor = true;
-			this->button2->Click += gcnew System::EventHandler(this, &Settings::button2_Click);
+			this->browseBtn->Location = System::Drawing::Point(253, 55);
+			this->browseBtn->Name = L"browseBtn";
+			this->browseBtn->Size = System::Drawing::Size(75, 23);
+			this->browseBtn->TabIndex = 4;
+			this->browseBtn->Text = L"Browse";
+			this->browseBtn->UseVisualStyleBackColor = true;
+			this->browseBtn->Click += gcnew System::EventHandler(this, &Settings::browseBtn_Click);
 			// 
 			// Settings
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->ClientSize = System::Drawing::Size(395, 154);
-			this->Controls->Add(this->button2);
+			this->Controls->Add(this->browseBtn);
 			this->Controls->Add(this->galleryPath);
 			this->Controls->Add(this->SettingsPrompt);
 			this->Controls->Add(this->cancelbtn);
@@ -136,12 +137,20 @@ namespace GECBIR {
 
 		}
 #pragma endregion
-	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				 this->Hide();			 }
+
+
+
+	private: System::Void okBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				 this->Hide();			 
+			 }
+
+
 	private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
 			 }
-	private: System::Void button2_Click(System::Object^  sender, System::EventArgs^  e) {
+
+
+	private: System::Void browseBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 				 FolderBrowserDialog^ fd = gcnew FolderBrowserDialog();
 				 if((bool)fd->ShowDialog())
 				 {
@@ -152,7 +161,7 @@ namespace GECBIR {
     
 			 }
 			
-private: System::Void cancelbtn_Click(System::Object^  sender, System::EventArgs^  e) {
+	private: System::Void cancelbtn_Click(System::Object^  sender, System::EventArgs^  e) {
 			 galleryPath->Text = galleryLocation;
 			 this->Hide();
 		 

@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
+    <EmbeddedResource Include="Settings.resx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
