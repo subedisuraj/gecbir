@@ -204,6 +204,7 @@ namespace GECBIR {
 			this->imageBtn->Size = System::Drawing::Size(52, 51);
 			this->imageBtn->TabIndex = 12;
 			this->imageBtn->UseVisualStyleBackColor = true;
+			this->imageBtn->Click += gcnew System::EventHandler(this, &mainWindow::imageBtn_Click);
 			// 
 			// settingsBtn
 			// 
@@ -281,6 +282,7 @@ namespace GECBIR {
 			this->foldersBtn->Size = System::Drawing::Size(52, 51);
 			this->foldersBtn->TabIndex = 5;
 			this->foldersBtn->UseVisualStyleBackColor = true;
+			this->foldersBtn->Click += gcnew System::EventHandler(this, &mainWindow::foldersBtn_Click);
 			// 
 			// titleBarPanel
 			// 
@@ -380,50 +382,56 @@ namespace GECBIR {
 
 		void InitializeDisplayPanel()
 		{
-			LoadImagesDisplayPanel();
+			displayPanel->Controls->Clear();
+			vector<tuple<string,string> > allImages = currentWorkspace->getAllImageLists();
+			Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
+			d.imagePaths = allImages;
+			LoadImagesDisplayPanel(d);
+			
 		}
 
 
-		void LoadImagesDisplayPanel()
+		void LoadImagesDisplayPanel(Dir d)
 		{
+			//for folder path
+			Label^ galleryPath = createLabel(d.path);
+			galleryPath->AutoSize = true;
+
+			//change label font size
+			float currentSize = galleryPath->Font->Size;
+            currentSize += 5.0F;
+			galleryPath->Font = gcnew System::Drawing::Font(galleryPath->Font->Name,currentSize, galleryPath->Font->Style);
 			
-			Label^ galleryPath = createLabel(currentWorkspace->galleryPath);
+
 			displayPanel->Controls->Add(galleryPath);
 
-			Label^ galleryPath1 = gcnew Label();
-			galleryPath1->BorderStyle = BorderStyle::Fixed3D;
-			galleryPath1->AutoSize = false;
-			galleryPath1-> Width = displayPanel->Width;
-			galleryPath1-> Height = 2; 
-			displayPanel->Controls->Add(galleryPath1);
+			//for border line
+			Label^ borderline = gcnew Label();
+			borderline->BorderStyle = BorderStyle::Fixed3D;
+			borderline-> Width = displayPanel->Width;
+			borderline-> Height = 2; 
+			displayPanel->Controls->Add(borderline);
 
 
-			flowImagesDisplayPanel = gcnew FlowLayoutPanel();
-			flowImagesDisplayPanel->Width = displayPanel -> Width;
-			flowImagesDisplayPanel->AutoSize = true;
-			flowImagesDisplayPanel->FlowDirection = FlowDirection::LeftToRight;
+			FlowLayoutPanel^ fp = gcnew FlowLayoutPanel();
+			fp->Width = displayPanel -> Width;
+			fp->AutoSize = true;
 
 
-			for(int m =0; m<2; m++)
+			for(int i =0; i < d.imagePaths.size(); i++)
 			{
-			//int NUM_OF_IMAGES = currentWorkspace->imagePaths.size();
-			int NUM_OF_IMAGES = 0;
-			for(int i =0; i < NUM_OF_IMAGES; i++)
-			{
-				
 				PictureBox^ pb = gcnew PictureBox();
 				int imageSize = (displayPanel -> Width)/4.2;
 				pb->Size = System::Drawing::Size(imageSize, imageSize);
 				pb->SizeMode = PictureBoxSizeMode::StretchImage;
-				pb->ImageLocation = getManagedString( "hello") ; 
+				pb->ImageLocation = getManagedString(std::get<1>(d.imagePaths[i])) ; 
 				pb->SizeMode = PictureBoxSizeMode::Normal;
-				flowImagesDisplayPanel->Controls->Add(pb);
-				
+				fp->Controls->Add(pb);
+			}
 
-			}
-			}
-			
-			displayPanel->Controls->Add(flowImagesDisplayPanel);
+
+			displayPanel->Controls->Add(fp);
+
 		}
 
 		String^ getManagedString(string unmanagedString)
@@ -455,48 +463,62 @@ namespace GECBIR {
 		}
 
 
-
-
-
-
-
-
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
 				 addcuda();
 			 }
 
+
+
 	private: System::Void label1_Click(System::Object^  sender, System::EventArgs^  e) {
 			 }
 
+
+
 	private: System::Void splitContainer1_Panel1_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 			 }
+
+
 	private: System::Void flowDisplayPanel_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
 
 				 FlowLayoutPanel^ f1 = (gcnew FlowLayoutPanel());
 				 Button^ b1 = (gcnew Button());
-
-
-
 			 }
-
-
-
-
-
 
 
 
 
 	private: System::Void mainWindow_ResizeEnd(System::Object^  sender, System::EventArgs^  e) {
-			//	 flowImagesDisplayPanel->Size = displayPanel->Size;
+				 InitializeDisplayPanel();
+				 //	 flowImagesDisplayPanel->Size = displayPanel->Size;
 			 }
-private: System::Void settingsBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 
+
+	private: System::Void settingsBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				 settingsWindow->Show();
+			 }
+
+
+
+	private: System::Void foldersBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 			 
-			 
-             settingsWindow->Show();
-          
-		 }
+				 displayPanel->Controls->Clear();
+				 for(int i=0; i<currentWorkspace->directoryList.size(); i++)
+				 {
+					 if(currentWorkspace->directoryList[i].imagePaths.size() > 0)
+						LoadImagesDisplayPanel(currentWorkspace->directoryList[i]);
+				 }
+			 }
+
+
+	private: System::Void imageBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				
+				displayPanel->Controls->Clear();
+				vector<tuple<string,string> > allImages = currentWorkspace->getAllImageLists();
+				Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
+				d.imagePaths = allImages;
+				LoadImagesDisplayPanel(d);
+				 
+			 }
 };
 
 }

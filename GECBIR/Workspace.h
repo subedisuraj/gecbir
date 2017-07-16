@@ -5,10 +5,12 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <tuple>
 #include <Windows.h>
 
 
 using std::vector;
+using std::tuple;
 using std::string;
 using std::cin;
 using std::cout;
@@ -20,12 +22,16 @@ class Workspace
 {
 public:
 	string galleryPath;
+	string galleryFolderName;
 	vector<Dir> directoryList;
+	
 
 public:
 	Workspace(void);
-	void Hello(String^ folder);
 	~Workspace(void);
+	void getImageLists(String^ foldername, String^ folderpath);
+	vector<tuple<string,string> > getAllImageLists();
+	
 	
 };
 
@@ -33,11 +39,13 @@ public:
 class Dir
 {
 public:
+	string name;
 	string path;
-	vector<string> imagePaths;
+	vector<tuple<string,string> > imagePaths; // Name, Path
 
-	Dir(string pathname)
+	Dir(string dirname, string pathname)
 	{
+		name = dirname;
 		path = pathname;
 	}
 
