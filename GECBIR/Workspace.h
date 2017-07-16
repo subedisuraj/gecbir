@@ -16,6 +16,10 @@ using std::cin;
 using std::cout;
 using namespace System;
 
+
+String^ getManagedString(string unmanagedString);
+string getUnmanagedString(String^ managedString);
+
 class Dir;
 
 class Workspace

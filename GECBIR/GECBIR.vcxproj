@@ -203,7 +203,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClCompile Include="Workspace.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="ImageBox.h">
+      <FileType>CppControl</FileType>
+    </ClInclude>
     <ClInclude Include="mainWindow.h">
       <FileType>CppForm</FileType>
     </ClInclude>
@@ -213,6 +215,9 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="Workspace.h" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ImageBox.resx">
+      <DependentUpon>ImageBox.h</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="mainWindow.resx">
       <DependentUpon>mainWindow.h</DependentUpon>
     </EmbeddedResource>

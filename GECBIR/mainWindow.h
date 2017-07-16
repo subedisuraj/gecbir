@@ -3,6 +3,7 @@
 #include "Workspace.h"
 #include <msclr\marshal_cppstd.h>
 #include "Settings.h"
+#include "ImageBox.h"
 
 
 namespace GECBIR {
@@ -420,13 +421,16 @@ namespace GECBIR {
 
 			for(int i =0; i < d.imagePaths.size(); i++)
 			{
-				PictureBox^ pb = gcnew PictureBox();
+				/*PictureBox^ pb = gcnew PictureBox();
 				int imageSize = (displayPanel -> Width)/4.2;
 				pb->Size = System::Drawing::Size(imageSize, imageSize);
 				pb->SizeMode = PictureBoxSizeMode::StretchImage;
 				pb->ImageLocation = getManagedString(std::get<1>(d.imagePaths[i])) ; 
-				pb->SizeMode = PictureBoxSizeMode::Normal;
-				fp->Controls->Add(pb);
+				pb->SizeMode = PictureBoxSizeMode::Normal;*/
+				String^ imageName = getManagedString( std::get<0>(d.imagePaths[i]));
+				String^ imagePath = getManagedString (std::get<1>(d.imagePaths[i]));
+				ImageBox^ ib = gcnew ImageBox(imageName, imagePath);
+				fp->Controls->Add(ib);
 			}
 
 
@@ -488,7 +492,7 @@ namespace GECBIR {
 
 
 	private: System::Void mainWindow_ResizeEnd(System::Object^  sender, System::EventArgs^  e) {
-				 InitializeDisplayPanel();
+				
 				 //	 flowImagesDisplayPanel->Size = displayPanel->Size;
 			 }
 

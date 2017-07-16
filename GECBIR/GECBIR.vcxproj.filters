@@ -5,10 +5,8 @@
     <ClInclude Include="Workspace.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="ImageBox.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="Settings.h" />
+    <ClInclude Include="ImageBox.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
@@ -34,9 +32,7 @@
     <ClCompile Include="Workspace.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="ImageBox.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="ImageBox.cpp" />
   </ItemGroup>
 </Project>
