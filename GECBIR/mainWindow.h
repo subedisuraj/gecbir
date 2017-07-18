@@ -59,6 +59,15 @@ namespace GECBIR {
 	private: System::Windows::Forms::Panel^  imagesDisplayPanel;
 	private: System::Windows::Forms::Panel^  imageOptionsPanel;
 	private: System::Windows::Forms::FlowLayoutPanel^  displayPanel;
+	private: System::Windows::Forms::FlowLayoutPanel^  flowLayoutPanel1;
+	private: System::Windows::Forms::Button^  deleteBtn;
+	private: System::Windows::Forms::Button^  similarBtn;
+	private: System::Windows::Forms::Button^  imgduplicateBtn;
+
+
+
+
+
 
 
 
@@ -96,13 +105,19 @@ namespace GECBIR {
 			this->titleBarPanel = (gcnew System::Windows::Forms::Panel());
 			this->optionsPanel = (gcnew System::Windows::Forms::Panel());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
+			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->similarBtn = (gcnew System::Windows::Forms::Button());
+			this->imgduplicateBtn = (gcnew System::Windows::Forms::Button());
+			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->mainPanel->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
 			this->splitContainer1->Panel2->SuspendLayout();
 			this->splitContainer1->SuspendLayout();
 			this->imagesDisplayPanel->SuspendLayout();
+			this->imageOptionsPanel->SuspendLayout();
 			this->titleBarPanel->SuspendLayout();
+			this->flowLayoutPanel1->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// mainPanel
@@ -145,7 +160,7 @@ namespace GECBIR {
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->imageOptionsPanel);
 			this->splitContainer1->Size = System::Drawing::Size(1104, 648);
-			this->splitContainer1->SplitterDistance = 849;
+			this->splitContainer1->SplitterDistance = 764;
 			this->splitContainer1->TabIndex = 14;
 			// 
 			// imagesDisplayPanel
@@ -157,7 +172,7 @@ namespace GECBIR {
 			this->imagesDisplayPanel->Controls->Add(this->displayPanel);
 			this->imagesDisplayPanel->Location = System::Drawing::Point(3, 3);
 			this->imagesDisplayPanel->Name = L"imagesDisplayPanel";
-			this->imagesDisplayPanel->Size = System::Drawing::Size(843, 645);
+			this->imagesDisplayPanel->Size = System::Drawing::Size(758, 645);
 			this->imagesDisplayPanel->TabIndex = 0;
 			// 
 			// displayPanel
@@ -171,7 +186,7 @@ namespace GECBIR {
 			this->displayPanel->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			this->displayPanel->Location = System::Drawing::Point(3, 3);
 			this->displayPanel->Name = L"displayPanel";
-			this->displayPanel->Size = System::Drawing::Size(835, 637);
+			this->displayPanel->Size = System::Drawing::Size(750, 637);
 			this->displayPanel->TabIndex = 0;
 			this->displayPanel->WrapContents = false;
 			// 
@@ -182,9 +197,10 @@ namespace GECBIR {
 				| System::Windows::Forms::AnchorStyles::Right));
 			this->imageOptionsPanel->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->imageOptionsPanel->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
+			this->imageOptionsPanel->Controls->Add(this->flowLayoutPanel1);
 			this->imageOptionsPanel->Location = System::Drawing::Point(3, 3);
 			this->imageOptionsPanel->Name = L"imageOptionsPanel";
-			this->imageOptionsPanel->Size = System::Drawing::Size(245, 642);
+			this->imageOptionsPanel->Size = System::Drawing::Size(330, 642);
 			this->imageOptionsPanel->TabIndex = 0;
 			// 
 			// settingsBtnLabel
@@ -317,6 +333,46 @@ namespace GECBIR {
 			this->textBox1->TabIndex = 6;
 			this->textBox1->Text = L"Search Images";
 			// 
+			// flowLayoutPanel1
+			// 
+			this->flowLayoutPanel1->AutoSize = true;
+			this->flowLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
+			this->flowLayoutPanel1->Controls->Add(this->imgduplicateBtn);
+			this->flowLayoutPanel1->Controls->Add(this->similarBtn);
+			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
+			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
+			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
+			this->flowLayoutPanel1->Size = System::Drawing::Size(328, 29);
+			this->flowLayoutPanel1->TabIndex = 0;
+			// 
+			// similarBtn
+			// 
+			this->similarBtn->Location = System::Drawing::Point(194, 3);
+			this->similarBtn->Name = L"similarBtn";
+			this->similarBtn->Size = System::Drawing::Size(82, 23);
+			this->similarBtn->TabIndex = 5;
+			this->similarBtn->Text = L"Find Related";
+			this->similarBtn->UseVisualStyleBackColor = true;
+			// 
+			// imgduplicateBtn
+			// 
+			this->imgduplicateBtn->Location = System::Drawing::Point(91, 3);
+			this->imgduplicateBtn->Name = L"imgduplicateBtn";
+			this->imgduplicateBtn->Size = System::Drawing::Size(97, 23);
+			this->imgduplicateBtn->TabIndex = 4;
+			this->imgduplicateBtn->Text = L"Find Duplicates";
+			this->imgduplicateBtn->UseVisualStyleBackColor = true;
+			// 
+			// deleteBtn
+			// 
+			this->deleteBtn->Location = System::Drawing::Point(3, 3);
+			this->deleteBtn->Name = L"deleteBtn";
+			this->deleteBtn->Size = System::Drawing::Size(82, 23);
+			this->deleteBtn->TabIndex = 3;
+			this->deleteBtn->Text = L"Delete";
+			this->deleteBtn->UseVisualStyleBackColor = true;
+			// 
 			// mainWindow
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -335,8 +391,11 @@ namespace GECBIR {
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->EndInit();
 			this->splitContainer1->ResumeLayout(false);
 			this->imagesDisplayPanel->ResumeLayout(false);
+			this->imageOptionsPanel->ResumeLayout(false);
+			this->imageOptionsPanel->PerformLayout();
 			this->titleBarPanel->ResumeLayout(false);
 			this->titleBarPanel->PerformLayout();
+			this->flowLayoutPanel1->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
