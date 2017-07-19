@@ -4,6 +4,7 @@
 #include <msclr\marshal_cppstd.h>
 #include "Settings.h"
 #include "ImageBox.h"
+#include "ImageAnalyser.h"
 
 
 namespace GECBIR {
@@ -92,6 +93,10 @@ namespace GECBIR {
 			this->imagesDisplayPanel = (gcnew System::Windows::Forms::Panel());
 			this->displayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->imageOptionsPanel = (gcnew System::Windows::Forms::Panel());
+			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->deleteBtn = (gcnew System::Windows::Forms::Button());
+			this->imgduplicateBtn = (gcnew System::Windows::Forms::Button());
+			this->similarBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtnLabel = (gcnew System::Windows::Forms::Label());
 			this->imageBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtn = (gcnew System::Windows::Forms::Button());
@@ -105,10 +110,6 @@ namespace GECBIR {
 			this->titleBarPanel = (gcnew System::Windows::Forms::Panel());
 			this->optionsPanel = (gcnew System::Windows::Forms::Panel());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
-			this->similarBtn = (gcnew System::Windows::Forms::Button());
-			this->imgduplicateBtn = (gcnew System::Windows::Forms::Button());
-			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->mainPanel->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
@@ -116,8 +117,8 @@ namespace GECBIR {
 			this->splitContainer1->SuspendLayout();
 			this->imagesDisplayPanel->SuspendLayout();
 			this->imageOptionsPanel->SuspendLayout();
-			this->titleBarPanel->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
+			this->titleBarPanel->SuspendLayout();
 			this->SuspendLayout();
 			// 
 			// mainPanel
@@ -202,6 +203,47 @@ namespace GECBIR {
 			this->imageOptionsPanel->Name = L"imageOptionsPanel";
 			this->imageOptionsPanel->Size = System::Drawing::Size(330, 642);
 			this->imageOptionsPanel->TabIndex = 0;
+			// 
+			// flowLayoutPanel1
+			// 
+			this->flowLayoutPanel1->AutoSize = true;
+			this->flowLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
+			this->flowLayoutPanel1->Controls->Add(this->imgduplicateBtn);
+			this->flowLayoutPanel1->Controls->Add(this->similarBtn);
+			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
+			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
+			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
+			this->flowLayoutPanel1->Size = System::Drawing::Size(328, 29);
+			this->flowLayoutPanel1->TabIndex = 0;
+			// 
+			// deleteBtn
+			// 
+			this->deleteBtn->Location = System::Drawing::Point(3, 3);
+			this->deleteBtn->Name = L"deleteBtn";
+			this->deleteBtn->Size = System::Drawing::Size(82, 23);
+			this->deleteBtn->TabIndex = 3;
+			this->deleteBtn->Text = L"Run Opencv";
+			this->deleteBtn->UseVisualStyleBackColor = true;
+			this->deleteBtn->Click += gcnew System::EventHandler(this, &mainWindow::deleteBtn_Click);
+			// 
+			// imgduplicateBtn
+			// 
+			this->imgduplicateBtn->Location = System::Drawing::Point(91, 3);
+			this->imgduplicateBtn->Name = L"imgduplicateBtn";
+			this->imgduplicateBtn->Size = System::Drawing::Size(97, 23);
+			this->imgduplicateBtn->TabIndex = 4;
+			this->imgduplicateBtn->Text = L"Find Duplicates";
+			this->imgduplicateBtn->UseVisualStyleBackColor = true;
+			// 
+			// similarBtn
+			// 
+			this->similarBtn->Location = System::Drawing::Point(194, 3);
+			this->similarBtn->Name = L"similarBtn";
+			this->similarBtn->Size = System::Drawing::Size(82, 23);
+			this->similarBtn->TabIndex = 5;
+			this->similarBtn->Text = L"Find Related";
+			this->similarBtn->UseVisualStyleBackColor = true;
 			// 
 			// settingsBtnLabel
 			// 
@@ -333,46 +375,6 @@ namespace GECBIR {
 			this->textBox1->TabIndex = 6;
 			this->textBox1->Text = L"Search Images";
 			// 
-			// flowLayoutPanel1
-			// 
-			this->flowLayoutPanel1->AutoSize = true;
-			this->flowLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
-			this->flowLayoutPanel1->Controls->Add(this->imgduplicateBtn);
-			this->flowLayoutPanel1->Controls->Add(this->similarBtn);
-			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
-			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
-			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
-			this->flowLayoutPanel1->Size = System::Drawing::Size(328, 29);
-			this->flowLayoutPanel1->TabIndex = 0;
-			// 
-			// similarBtn
-			// 
-			this->similarBtn->Location = System::Drawing::Point(194, 3);
-			this->similarBtn->Name = L"similarBtn";
-			this->similarBtn->Size = System::Drawing::Size(82, 23);
-			this->similarBtn->TabIndex = 5;
-			this->similarBtn->Text = L"Find Related";
-			this->similarBtn->UseVisualStyleBackColor = true;
-			// 
-			// imgduplicateBtn
-			// 
-			this->imgduplicateBtn->Location = System::Drawing::Point(91, 3);
-			this->imgduplicateBtn->Name = L"imgduplicateBtn";
-			this->imgduplicateBtn->Size = System::Drawing::Size(97, 23);
-			this->imgduplicateBtn->TabIndex = 4;
-			this->imgduplicateBtn->Text = L"Find Duplicates";
-			this->imgduplicateBtn->UseVisualStyleBackColor = true;
-			// 
-			// deleteBtn
-			// 
-			this->deleteBtn->Location = System::Drawing::Point(3, 3);
-			this->deleteBtn->Name = L"deleteBtn";
-			this->deleteBtn->Size = System::Drawing::Size(82, 23);
-			this->deleteBtn->TabIndex = 3;
-			this->deleteBtn->Text = L"Delete";
-			this->deleteBtn->UseVisualStyleBackColor = true;
-			// 
 			// mainWindow
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -393,9 +395,9 @@ namespace GECBIR {
 			this->imagesDisplayPanel->ResumeLayout(false);
 			this->imageOptionsPanel->ResumeLayout(false);
 			this->imageOptionsPanel->PerformLayout();
+			this->flowLayoutPanel1->ResumeLayout(false);
 			this->titleBarPanel->ResumeLayout(false);
 			this->titleBarPanel->PerformLayout();
-			this->flowLayoutPanel1->ResumeLayout(false);
 			this->ResumeLayout(false);
 
 		}
@@ -582,6 +584,9 @@ namespace GECBIR {
 				LoadImagesDisplayPanel(d);
 				 
 			 }
+private: System::Void deleteBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+			 ImageAnalyser^ a = gcnew ImageAnalyser();
+		 }
 };
 
 }

@@ -7,10 +7,12 @@
     </ClInclude>
     <ClInclude Include="Settings.h" />
     <ClInclude Include="ImageBox.h" />
+    <ClInclude Include="ImageAnalyser.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
     <EmbeddedResource Include="Settings.resx" />
+    <EmbeddedResource Include="ImageBox.resx" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source">
@@ -34,5 +36,6 @@
     </ClCompile>
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="ImageBox.cpp" />
+    <ClCompile Include="ImageAnalyser.cpp" />
   </ItemGroup>
 </Project>
