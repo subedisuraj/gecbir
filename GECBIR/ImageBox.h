@@ -55,8 +55,8 @@ namespace GECBIR {
 	private: Boolean isSelected;
 			 static int imageId = 0;
 
-	public:		 String^ imagePath;
-		static	 set<string> * selectionList = new set<string>();
+	public:	String^ imagePath;
+	static	 set<string> * selectionList = new set<string>();
 			
 
 	protected: 
@@ -127,6 +127,14 @@ namespace GECBIR {
 			this->pictureBox1->Text = imgPath;
 			this->pictureBox1->SizeMode = PictureBoxSizeMode::Normal;
 			this->imgName->Text = imgName;
+		}
+
+		static vector<string> getSelectionListVector()
+		{
+			std::set<string>& selectionListValue = *selectionList;
+			std::vector<string> selectionListVector(selectionListValue.size());
+			std::copy(selectionListValue.begin(), selectionListValue.end(), selectionListVector.begin());
+			return selectionListVector;
 		}
 
 

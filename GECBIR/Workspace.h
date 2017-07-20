@@ -34,7 +34,7 @@ public:
 	Workspace(void);
 	~Workspace(void);
 	void getImageLists(String^ foldername, String^ folderpath);
-	vector<tuple<string,string> > getAllImageLists();
+	vector<tuple<string,string> > getAllImageLists();  //Name , Path
 	
 	
 };

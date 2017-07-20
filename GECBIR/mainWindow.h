@@ -235,6 +235,7 @@ namespace GECBIR {
 			this->imgduplicateBtn->TabIndex = 4;
 			this->imgduplicateBtn->Text = L"Find Duplicates";
 			this->imgduplicateBtn->UseVisualStyleBackColor = true;
+			this->imgduplicateBtn->Click += gcnew System::EventHandler(this, &mainWindow::imgduplicateBtn_Click);
 			// 
 			// similarBtn
 			// 
@@ -449,7 +450,7 @@ namespace GECBIR {
 			Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
 			d.imagePaths = allImages;
 			LoadImagesDisplayPanel(d);
-			
+
 		}
 
 
@@ -461,9 +462,9 @@ namespace GECBIR {
 
 			//change label font size
 			float currentSize = galleryPath->Font->Size;
-            currentSize += 5.0F;
+			currentSize += 5.0F;
 			galleryPath->Font = gcnew System::Drawing::Font(galleryPath->Font->Name,currentSize, galleryPath->Font->Style);
-			
+
 
 			displayPanel->Controls->Add(galleryPath);
 
@@ -553,7 +554,7 @@ namespace GECBIR {
 
 
 	private: System::Void mainWindow_ResizeEnd(System::Object^  sender, System::EventArgs^  e) {
-				
+
 				 //	 flowImagesDisplayPanel->Size = displayPanel->Size;
 			 }
 
@@ -565,28 +566,42 @@ namespace GECBIR {
 
 
 	private: System::Void foldersBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-			 
+
 				 displayPanel->Controls->Clear();
 				 for(int i=0; i<currentWorkspace->directoryList.size(); i++)
 				 {
 					 if(currentWorkspace->directoryList[i].imagePaths.size() > 0)
-						LoadImagesDisplayPanel(currentWorkspace->directoryList[i]);
+						 LoadImagesDisplayPanel(currentWorkspace->directoryList[i]);
 				 }
 			 }
 
 
 	private: System::Void imageBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-				
-				displayPanel->Controls->Clear();
-				vector<tuple<string,string> > allImages = currentWorkspace->getAllImageLists();
-				Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
-				d.imagePaths = allImages;
-				LoadImagesDisplayPanel(d);
-				 
+
+				 displayPanel->Controls->Clear();
+				 vector<tuple<string,string> > allImages = currentWorkspace->getAllImageLists();
+				 Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
+				 d.imagePaths = allImages;
+				 LoadImagesDisplayPanel(d);
+
 			 }
-private: System::Void deleteBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-			 ImageAnalyser^ a = gcnew ImageAnalyser();
-		 }
-};
+	private: System::Void deleteBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+
+			 }
+
+
+	private: System::Void imgduplicateBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				 vector<string> selectedImagesList = ImageBox::getSelectionListVector();
+
+
+				 ImageAnalyser selectedImage = ImageAnalyser(selectedImagesList[0]);
+				 vector<tuple<string,string> > allImagesinGallery =  currentWorkspace->getAllImageLists();
+				 for(int i =0; i<allImagesinGallery.size(); i++)
+				 {
+					 selectedImage.CompareEqualImages(std::get<1>(allImagesinGallery[i]));
+				 }
+				 //selectedImage.DisplayImage();
+			 }
+	};
 
 }
