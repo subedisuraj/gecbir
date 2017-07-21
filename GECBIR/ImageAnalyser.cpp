@@ -65,21 +65,21 @@ bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 
 }
 
-vector<tuple<string,string> > ImageAnalyser::findDuplicates()
+vector<ImageInfo > ImageAnalyser::findDuplicates()
 {
-	vector<tuple<string,string> > dupImages = vector<tuple<string,string> >();
+	vector<ImageInfo > dupImages = vector<ImageInfo>();
 	ImageAnalyser selectedImage = ImageAnalyser(this->ImageFullName);
-	vector<tuple<string,string> > allImagesinGallery =  mainWindow::currentWorkspace->getAllImageLists();
+	vector<ImageInfo > allImagesinGallery =  mainWindow::currentWorkspace->getAllImageLists();
 	for(int j = 0; j<allImagesinGallery.size(); j++)
 	{
-		string otherImageName = std::get<0>(allImagesinGallery[j] ); 
-		string otherImageFullName = std::get<1>(allImagesinGallery[j] ); 
+		string otherImageName = allImagesinGallery[j].ImageName; 
+		string otherImageFullName = allImagesinGallery[j].ImagePath;
 		if(selectedImage.ImageFullName != otherImageFullName )
 		{
 			bool equalImages = selectedImage.CompareImageEquality(otherImageFullName);
 			if(equalImages)
 			{
-				dupImages.push_back(tuple<string,string>(otherImageName,otherImageFullName));
+				dupImages.push_back(ImageInfo(otherImageName,otherImageFullName));
 			}
 		}
 	}

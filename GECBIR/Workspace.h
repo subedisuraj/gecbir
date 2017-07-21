@@ -21,7 +21,7 @@ String^ getManagedString(string unmanagedString);
 string getUnmanagedString(String^ managedString);
 
 class Dir;
-
+class ImageInfo;
 class Workspace
 {
 public:
@@ -33,9 +33,9 @@ public:
 public:
 	Workspace(void);
 	~Workspace(void);
-	void getImageLists(String^ foldername, String^ folderpath);
-	vector<tuple<string,string> > getAllImageLists();  //Name , Path
-	
+	void getImageListsinGallery(String^ foldername, String^ folderpath);
+	vector<ImageInfo > getAllImageLists();  //Name , Path
+	Dir Workspace::getImageListsInDir(String^ foldername, String^ folderpath);
 	
 };
 
@@ -45,7 +45,8 @@ class Dir
 public:
 	string name;
 	string path;
-	vector<tuple<string,string> > imagePaths; // Name, Path
+	vector<ImageInfo> imagePaths;
+	//vector<tuple<string,string> > imagePaths; // Name, Path
 
 
 	Dir(){};
@@ -55,5 +56,20 @@ public:
 		path = pathname;
 	}
 
+};
+
+class ImageInfo
+{
+public:
+	string ImageName;
+	string ImagePath;
+	string ImageID;
+
+	ImageInfo(){};
+	ImageInfo(string imgName, string imgPath)
+	{
+		ImageName = imgName;
+		ImagePath = imgPath;
+	}
 };
 

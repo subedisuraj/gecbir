@@ -31,7 +31,7 @@ public:
 	IplImage * ResizeImage(IplImage * source);
 	ImageAnalyser(string ImagePath);
 	bool CompareImageEquality(string OtherImagePath);
-	vector<tuple<string,string> > findDuplicates(); 
+	vector<ImageInfo> findDuplicates(); 
 	vector<string>  findRelatedImages(string ImagePath);
 	void ImageAnalyser::DisplayImage();
 };

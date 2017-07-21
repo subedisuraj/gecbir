@@ -20,44 +20,42 @@ Workspace::Workspace(void)
 	galleryPath = "C:\\Users\\ss0193\\Desktop\\MyGallery\\";
 	DirectoryInfo^ dir = gcnew DirectoryInfo(getManagedString(galleryPath));
 	galleryFolderName = getUnmanagedString( dir->Name);
-	getImageLists(dir->Name, dir->FullName);
+	getImageListsinGallery(dir->Name, dir->FullName);
 
 }
 
-
-
-void Workspace::getImageLists(String^ foldername, String^ folderpath)
+Dir Workspace::getImageListsInDir(String^ foldername, String^ folderpath)
 {
 	Dir curFolder = Dir(getUnmanagedString(foldername), getUnmanagedString(folderpath));
-	array<String^>^ curfiles = Directory::GetFiles( folderpath, "*\.jpg" );
-	for (int j=0; j<curfiles->Length; j++)
+	array<String^>^ ImageFileslist = Directory::GetFiles( folderpath, "*\.jpg" );
+	for (int j=0; j<ImageFileslist->Length; j++)
 	{
-		DirectoryInfo^ dir = gcnew DirectoryInfo(curfiles[j]);
-		tuple<string, string> fileInfo = tuple<string, string>(getUnmanagedString(dir->Name), getUnmanagedString(dir->FullName));
-		curFolder.imagePaths.push_back(fileInfo);
+		DirectoryInfo^ imageFile = gcnew DirectoryInfo(ImageFileslist[j]);
+		ImageInfo imagefileInfo = ImageInfo(getUnmanagedString(imageFile->Name), getUnmanagedString(imageFile->FullName));
+		curFolder.imagePaths.push_back(imagefileInfo);
 	}
-	directoryList.push_back(curFolder);
+	return curFolder;
+}
 
+void Workspace::getImageListsinGallery(String^ foldername, String^ folderpath)
+{
+	//get Imagelist inside current folder
+	Dir rootFolderImages = getImageListsInDir( foldername, folderpath);
+	directoryList.push_back(rootFolderImages);
 
+	//get imagelist of subfolders
 	array<String^>^ dirs = Directory::GetDirectories( folderpath );
 	for (int i=0; i<dirs->Length; i++)
 	{
 		DirectoryInfo^ dir = gcnew DirectoryInfo(dirs[i]);
-		Dir d = Dir(getUnmanagedString(dir->Name),getUnmanagedString(dir->FullName));
-		array<String^>^ files = Directory::GetFiles( dirs[i], "*\.jpg" );
-		for (int j=0; j<files->Length; j++)
-		{
-			DirectoryInfo^ dir = gcnew DirectoryInfo(files[j]);
-			tuple<string, string> fileInfo = tuple<string, string>(getUnmanagedString(dir->Name), getUnmanagedString(dir->FullName));
-			d.imagePaths.push_back(fileInfo);
-		}
-		directoryList.push_back(d);
+		Dir subFolderIMages = getImageListsInDir(dir->Name,dir->FullName);
+		directoryList.push_back(subFolderIMages);
 	}
 }
 
-vector<tuple<string,string> > Workspace::getAllImageLists()
+vector<ImageInfo > Workspace::getAllImageLists()
 {
-	vector<tuple<string,string> > allImagePaths;
+	vector<ImageInfo > allImagePaths;
 	for(int i=0; i< directoryList.size(); i++)
 	{
 		for(int j =0; j< directoryList[i].imagePaths.size(); j++)
