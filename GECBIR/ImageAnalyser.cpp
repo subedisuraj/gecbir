@@ -1,10 +1,12 @@
 #include "ImageAnalyser.h"
-
+#include "Imagebox.h"
+#include "mainWindow.h"
 
 #define IMAGE_SIZE 256
 using namespace cv;
 using std::cout;
 
+namespace GECBIR {
 ImageAnalyser::ImageAnalyser(string ImagePath)
 {
 	this->ImageFullName = ImagePath;
@@ -37,12 +39,52 @@ void ImageAnalyser::DisplayImage()
 }
 
 
-bool ImageAnalyser::CompareEqualImages(string OtherImagePath)
+bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 {
-	return false;
+#ifndef RUN_PIXEL_PARALLEL
+	ImageAnalyser otherImg = ImageAnalyser(OtherImagePath);
+	int R = this->ImageData.rows;
+	int C = this->ImageData.rows;
+	int Ch = 3;
+	/*int Ch = this->ImageData.channels(;
+	int bitDepth = this->ImageData.depth;*/
+
+	for(int i=0; i<R; i++)
+	{
+		for(int j=0; j<C*Ch; j++)
+		{
+			if(abs(this->ImageData.at<uchar>(i,j) - otherImg.ImageData.at<uchar>(i,j))>=2)
+				return false;
+		}
+	}
+	return true;
+
+#else
+	return false; 
+#endif
+
 }
 
-
+vector<tuple<string,string> > ImageAnalyser::findDuplicates()
+{
+	vector<tuple<string,string> > dupImages = vector<tuple<string,string> >();
+	ImageAnalyser selectedImage = ImageAnalyser(this->ImageFullName);
+	vector<tuple<string,string> > allImagesinGallery =  mainWindow::currentWorkspace->getAllImageLists();
+	for(int j = 0; j<allImagesinGallery.size(); j++)
+	{
+		string otherImageName = std::get<0>(allImagesinGallery[j] ); 
+		string otherImageFullName = std::get<1>(allImagesinGallery[j] ); 
+		if(selectedImage.ImageFullName != otherImageFullName )
+		{
+			bool equalImages = selectedImage.CompareImageEquality(otherImageFullName);
+			if(equalImages)
+			{
+				dupImages.push_back(tuple<string,string>(otherImageName,otherImageFullName));
+			}
+		}
+	}
+	return dupImages;
+}
 
 
 
@@ -86,4 +128,5 @@ void ImageAnalyser::Sample(void)
 	namedWindow("NewWindow", CV_WINDOW_NORMAL);
 	imshow("After", src1);
 	waitKey(5000);
+}
 }

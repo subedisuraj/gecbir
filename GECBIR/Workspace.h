@@ -47,6 +47,8 @@ public:
 	string path;
 	vector<tuple<string,string> > imagePaths; // Name, Path
 
+
+	Dir(){};
 	Dir(string dirname, string pathname)
 	{
 		name = dirname;

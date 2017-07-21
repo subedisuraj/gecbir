@@ -8,6 +8,9 @@
     <ClInclude Include="Settings.h" />
     <ClInclude Include="ImageBox.h" />
     <ClInclude Include="ImageAnalyser.h" />
+    <ClInclude Include="ImageAnalyserParallel.h">
+      <Filter>Source</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
@@ -37,5 +40,8 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="ImageAnalyser.cpp" />
+    <ClCompile Include="ImageAnalyserParallel.cu">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

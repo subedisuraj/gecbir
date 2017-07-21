@@ -22,16 +22,9 @@ namespace GECBIR {
 
 		ImageBox(String^imgName, String^imgPath )
 		{
-			//InitializeComponent();
-			/*	int imageSize = 50;
-			pictureBox1 = gcnew PictureBox();
-			pictureBox1->Size = System::Drawing::Size(imageSize, imageSize);
-			pictureBox1->SizeMode = PictureBoxSizeMode::StretchImage;
-			pictureBox1->ImageLocation = imgPath ; 
-			pictureBox1->SizeMode = PictureBoxSizeMode::Normal;*/
+
 			InitializeComponent();
 			isSelected = false;
-
 			this->imageId = imageId++;
 			this->imagePath = imgPath;
 			AddPicture(imgName, imgPath);
@@ -155,7 +148,10 @@ namespace GECBIR {
 				 } 
 
 			 }
+
 	private: System::Void ImageBox_MouseHover(System::Object^  sender, System::EventArgs^  e) {
+				 ToolTip^ tt = gcnew ToolTip();
+				 tt->SetToolTip(this->pictureBox1, this->imagePath);
 				 this->BackColor=System::Drawing::Color::LightBlue;
 			 }
 

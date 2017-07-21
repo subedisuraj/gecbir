@@ -8,6 +8,11 @@
 #include <vector>
 #include <set>
 
+#ifndef RUN_PIXEL_PARALLEL
+//#define RUN_PARALLEL
+#endif
+
+namespace GECBIR{
 
 using std::set;
 using std::vector;
@@ -17,7 +22,7 @@ using std::cout;
 
 class ImageAnalyser
 {
-private: string ImageFullName;
+public: string ImageFullName;
 		 Mat ImageData;
 
 public:
@@ -25,9 +30,10 @@ public:
 	ImageAnalyser(){};
 	IplImage * ResizeImage(IplImage * source);
 	ImageAnalyser(string ImagePath);
-	bool CompareEqualImages(string OtherImagePath);
-	vector<Dir> findDuplicates( string ImagePath); 
-	vector<Dir>  findRelatedImages(string ImagePath);
+	bool CompareImageEquality(string OtherImagePath);
+	vector<tuple<string,string> > findDuplicates(); 
+	vector<string>  findRelatedImages(string ImagePath);
 	void ImageAnalyser::DisplayImage();
 };
 
+}
