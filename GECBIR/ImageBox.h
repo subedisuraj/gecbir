@@ -74,6 +74,7 @@ namespace GECBIR {
 			this->pictureBox1->Location = System::Drawing::Point(7, 7);
 			this->pictureBox1->Name = L"pictureBox1";
 			this->pictureBox1->Size = System::Drawing::Size(180, 180);
+			this->pictureBox1->SizeMode = System::Windows::Forms::PictureBoxSizeMode::Zoom;
 			this->pictureBox1->TabIndex = 0;
 			this->pictureBox1->TabStop = false;
 			this->pictureBox1->Click += gcnew System::EventHandler(this, &ImageBox::ImageBox_Click);
@@ -115,10 +116,8 @@ namespace GECBIR {
 		void AddPicture(String^ imgName, String^ imgPath)
 		{
 			this->pictureBox1->Size = System::Drawing::Size(180, 180);
-			this->pictureBox1->SizeMode = PictureBoxSizeMode::StretchImage;
 			this->pictureBox1->ImageLocation = imgPath ; 
 			this->pictureBox1->Text = imgPath;
-			this->pictureBox1->SizeMode = PictureBoxSizeMode::Normal;
 			this->imgName->Text = imgName;
 		}
 

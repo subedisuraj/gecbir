@@ -94,6 +94,7 @@ namespace GECBIR {
 			this->imagesDisplayPanel = (gcnew System::Windows::Forms::Panel());
 			this->displayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->imageOptionsPanel = (gcnew System::Windows::Forms::Panel());
+			this->auxDisplayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->imgduplicateBtn = (gcnew System::Windows::Forms::Button());
@@ -111,7 +112,6 @@ namespace GECBIR {
 			this->titleBarPanel = (gcnew System::Windows::Forms::Panel());
 			this->optionsPanel = (gcnew System::Windows::Forms::Panel());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
-			this->auxDisplayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->mainPanel->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->splitContainer1))->BeginInit();
 			this->splitContainer1->Panel1->SuspendLayout();
@@ -206,6 +206,14 @@ namespace GECBIR {
 			this->imageOptionsPanel->Name = L"imageOptionsPanel";
 			this->imageOptionsPanel->Size = System::Drawing::Size(351, 642);
 			this->imageOptionsPanel->TabIndex = 0;
+			// 
+			// auxDisplayPanel
+			// 
+			this->auxDisplayPanel->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->auxDisplayPanel->Location = System::Drawing::Point(0, 59);
+			this->auxDisplayPanel->Name = L"auxDisplayPanel";
+			this->auxDisplayPanel->Size = System::Drawing::Size(349, 581);
+			this->auxDisplayPanel->TabIndex = 1;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -328,6 +336,7 @@ namespace GECBIR {
 			this->duplicatesBtn->Size = System::Drawing::Size(52, 51);
 			this->duplicatesBtn->TabIndex = 10;
 			this->duplicatesBtn->UseVisualStyleBackColor = true;
+			this->duplicatesBtn->Click += gcnew System::EventHandler(this, &mainWindow::duplicatesBtn_Click);
 			// 
 			// foldersbtnLabel
 			// 
@@ -380,14 +389,6 @@ namespace GECBIR {
 			this->textBox1->Size = System::Drawing::Size(661, 20);
 			this->textBox1->TabIndex = 6;
 			this->textBox1->Text = L"Search Images";
-			// 
-			// auxDisplayPanel
-			// 
-			this->auxDisplayPanel->Dock = System::Windows::Forms::DockStyle::Fill;
-			this->auxDisplayPanel->Location = System::Drawing::Point(0, 59);
-			this->auxDisplayPanel->Name = L"auxDisplayPanel";
-			this->auxDisplayPanel->Size = System::Drawing::Size(349, 581);
-			this->auxDisplayPanel->TabIndex = 1;
 			// 
 			// mainWindow
 			// 
@@ -509,7 +510,7 @@ namespace GECBIR {
 
 		}
 
-		void LoadDuplicateImages(string ImagePath, vector<tuple<string,string> > dupImages)
+		void LoadDuplicateImages(string ImagePath, vector<tuple<string,string> > dupImages, FlowLayoutPanel^  imagePanel )
 		{
 			//Label^ galleryPath = createLabel("Duplicate Images of " + ImagePath);
 			//galleryPath->AutoSize = true;
@@ -523,9 +524,9 @@ namespace GECBIR {
 			//for border line
 			Label^ borderline = gcnew Label();
 			borderline->BorderStyle = BorderStyle::Fixed3D;
-			borderline-> Width = auxDisplayPanel->Width;
+			borderline-> Width = imagePanel->Width;
 			borderline-> Height = 2; 
-			auxDisplayPanel->Controls->Add(borderline);
+			imagePanel->Controls->Add(borderline);
 
 			FlowLayoutPanel^ fp = gcnew FlowLayoutPanel();
 			fp->Width = displayPanel -> Width;
@@ -539,7 +540,7 @@ namespace GECBIR {
 				ImageBox^ ib = gcnew ImageBox(imageName, imagePath);
 				fp->Controls->Add(ib);
 			}
-			auxDisplayPanel->Controls->Add(fp);
+			imagePanel->Controls->Add(fp);
 
 		}
 
@@ -644,11 +645,25 @@ namespace GECBIR {
 					 vector<tuple<string,string> > dupImages = selectedImage.findDuplicates();
 					 if(dupImages.size()>0)
 					 {
-						 LoadDuplicateImages(selectedImage.ImageFullName, dupImages);
+						 LoadDuplicateImages(selectedImage.ImageFullName, dupImages, auxDisplayPanel);
 					 }
 				 }
 
 			 }
-	};
+	private: System::Void duplicatesBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				 vector<tuple<string,string> > allImagesList = currentWorkspace->getAllImageLists();
+				 displayPanel->Controls->Clear();
+				 for(int i=0; i<allImagesList.size(); i++)
+				 {
+					 ImageAnalyser selectedImage = ImageAnalyser(std::get<1>(allImagesList[i]));
+					 vector<tuple<string,string> > dupImages = selectedImage.findDuplicates();
+					 //make a list of duplicate images using hash table image->list of duplicate image locations 
+					 if(dupImages.size()>0)
+					 {
+						 LoadDuplicateImages(selectedImage.ImageFullName, dupImages, displayPanel);
+					 }
+				 }
+			 }
+};
 
 }
