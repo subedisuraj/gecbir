@@ -7,6 +7,7 @@
 #include <opencv\highgui.h>
 #include <vector>
 #include <set>
+#include "Workspace.h"
 
 #ifndef RUN_PIXEL_PARALLEL
 //#define RUN_PARALLEL
@@ -22,17 +23,18 @@ using std::cout;
 
 class ImageAnalyser
 {
-public: string ImageFullName;
+public: ImageInfo imagefile;
 		 Mat ImageData;
 
 public:
 	void Sample(void);
 	ImageAnalyser(){};
 	IplImage * ResizeImage(IplImage * source);
-	ImageAnalyser(string ImagePath);
+	ImageAnalyser(ImageInfo imginf);
 	bool CompareImageEquality(string OtherImagePath);
+	bool CompareImageSimilarity(string OtherImagePath);
 	vector<ImageInfo> findDuplicates(); 
-	vector<string>  findRelatedImages(string ImagePath);
+	vector<ImageInfo>  findSimilarImages(string ImagePath);
 	void ImageAnalyser::DisplayImage();
 };
 

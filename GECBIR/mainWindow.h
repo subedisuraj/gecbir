@@ -5,7 +5,7 @@
 #include "Settings.h"
 #include "ImageBox.h"
 #include "ImageAnalyser.h"
-
+#include <stdio.h>
 
 namespace GECBIR {
 
@@ -15,7 +15,7 @@ namespace GECBIR {
 	using namespace System::Windows::Forms;
 	using namespace System::Data;
 	using namespace System::Drawing;
-
+	using std::string;
 	int addcuda();
 
 	/// <summary>
@@ -42,10 +42,12 @@ namespace GECBIR {
 	protected: 
 	private: System::Windows::Forms::Button^  imageBtn;
 	private: System::Windows::Forms::Label^  imageBtnLabel;
-	private: System::Windows::Forms::Label^  relatedBtnLabel;
+	private: System::Windows::Forms::Label^  similarBtnLabel;
+
 
 	private: System::Windows::Forms::Label^  duplicatesBtnLabel;
-	private: System::Windows::Forms::Button^  relatedBtn;
+	private: System::Windows::Forms::Button^  similarBtn;
+
 
 	private: System::Windows::Forms::Button^  duplicatesBtn;
 	private: System::Windows::Forms::Label^  foldersbtnLabel;
@@ -62,10 +64,14 @@ namespace GECBIR {
 	private: System::Windows::Forms::FlowLayoutPanel^  displayPanel;
 	private: System::Windows::Forms::FlowLayoutPanel^  flowLayoutPanel1;
 	private: System::Windows::Forms::Button^  deleteBtn;
-	private: System::Windows::Forms::Button^  similarBtn;
+	private: System::Windows::Forms::Button^  findSimilarBtn;
+
 	private: System::Windows::Forms::Button^  findduplicateBtn;
 
 	private: System::Windows::Forms::FlowLayoutPanel^  auxDisplayPanel;
+	private: System::Windows::Forms::Label^  loadDuplicatesLabel;
+
+
 
 
 
@@ -96,17 +102,18 @@ namespace GECBIR {
 			this->displayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->imageOptionsPanel = (gcnew System::Windows::Forms::Panel());
 			this->auxDisplayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
+			this->loadDuplicatesLabel = (gcnew System::Windows::Forms::Label());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->findduplicateBtn = (gcnew System::Windows::Forms::Button());
-			this->similarBtn = (gcnew System::Windows::Forms::Button());
+			this->findSimilarBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtnLabel = (gcnew System::Windows::Forms::Label());
 			this->imageBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtn = (gcnew System::Windows::Forms::Button());
 			this->imageBtnLabel = (gcnew System::Windows::Forms::Label());
-			this->relatedBtnLabel = (gcnew System::Windows::Forms::Label());
+			this->similarBtnLabel = (gcnew System::Windows::Forms::Label());
 			this->duplicatesBtnLabel = (gcnew System::Windows::Forms::Label());
-			this->relatedBtn = (gcnew System::Windows::Forms::Button());
+			this->similarBtn = (gcnew System::Windows::Forms::Button());
 			this->duplicatesBtn = (gcnew System::Windows::Forms::Button());
 			this->foldersbtnLabel = (gcnew System::Windows::Forms::Label());
 			this->foldersBtn = (gcnew System::Windows::Forms::Button());
@@ -120,6 +127,7 @@ namespace GECBIR {
 			this->splitContainer1->SuspendLayout();
 			this->imagesDisplayPanel->SuspendLayout();
 			this->imageOptionsPanel->SuspendLayout();
+			this->auxDisplayPanel->SuspendLayout();
 			this->flowLayoutPanel1->SuspendLayout();
 			this->titleBarPanel->SuspendLayout();
 			this->SuspendLayout();
@@ -135,9 +143,9 @@ namespace GECBIR {
 			this->mainPanel->Controls->Add(this->imageBtn);
 			this->mainPanel->Controls->Add(this->settingsBtn);
 			this->mainPanel->Controls->Add(this->imageBtnLabel);
-			this->mainPanel->Controls->Add(this->relatedBtnLabel);
+			this->mainPanel->Controls->Add(this->similarBtnLabel);
 			this->mainPanel->Controls->Add(this->duplicatesBtnLabel);
-			this->mainPanel->Controls->Add(this->relatedBtn);
+			this->mainPanel->Controls->Add(this->similarBtn);
 			this->mainPanel->Controls->Add(this->duplicatesBtn);
 			this->mainPanel->Controls->Add(this->foldersbtnLabel);
 			this->mainPanel->Controls->Add(this->foldersBtn);
@@ -164,7 +172,7 @@ namespace GECBIR {
 			// 
 			this->splitContainer1->Panel2->Controls->Add(this->imageOptionsPanel);
 			this->splitContainer1->Size = System::Drawing::Size(1104, 648);
-			this->splitContainer1->SplitterDistance = 743;
+			this->splitContainer1->SplitterDistance = 692;
 			this->splitContainer1->TabIndex = 14;
 			// 
 			// imagesDisplayPanel
@@ -176,7 +184,7 @@ namespace GECBIR {
 			this->imagesDisplayPanel->Controls->Add(this->displayPanel);
 			this->imagesDisplayPanel->Location = System::Drawing::Point(3, 3);
 			this->imagesDisplayPanel->Name = L"imagesDisplayPanel";
-			this->imagesDisplayPanel->Size = System::Drawing::Size(737, 645);
+			this->imagesDisplayPanel->Size = System::Drawing::Size(686, 645);
 			this->imagesDisplayPanel->TabIndex = 0;
 			// 
 			// displayPanel
@@ -190,7 +198,7 @@ namespace GECBIR {
 			this->displayPanel->FlowDirection = System::Windows::Forms::FlowDirection::TopDown;
 			this->displayPanel->Location = System::Drawing::Point(3, 3);
 			this->displayPanel->Name = L"displayPanel";
-			this->displayPanel->Size = System::Drawing::Size(729, 637);
+			this->displayPanel->Size = System::Drawing::Size(678, 637);
 			this->displayPanel->TabIndex = 0;
 			this->displayPanel->WrapContents = false;
 			// 
@@ -205,16 +213,30 @@ namespace GECBIR {
 			this->imageOptionsPanel->Controls->Add(this->flowLayoutPanel1);
 			this->imageOptionsPanel->Location = System::Drawing::Point(3, 3);
 			this->imageOptionsPanel->Name = L"imageOptionsPanel";
-			this->imageOptionsPanel->Size = System::Drawing::Size(351, 642);
+			this->imageOptionsPanel->Size = System::Drawing::Size(402, 642);
 			this->imageOptionsPanel->TabIndex = 0;
 			// 
 			// auxDisplayPanel
 			// 
+			this->auxDisplayPanel->AutoScroll = true;
+			this->auxDisplayPanel->Controls->Add(this->loadDuplicatesLabel);
 			this->auxDisplayPanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->auxDisplayPanel->Location = System::Drawing::Point(0, 59);
 			this->auxDisplayPanel->Name = L"auxDisplayPanel";
-			this->auxDisplayPanel->Size = System::Drawing::Size(349, 581);
+			this->auxDisplayPanel->Size = System::Drawing::Size(400, 581);
 			this->auxDisplayPanel->TabIndex = 1;
+			this->auxDisplayPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &mainWindow::auxDisplayPanel_Paint);
+			// 
+			// loadDuplicatesLabel
+			// 
+			this->loadDuplicatesLabel->AutoSize = true;
+			this->loadDuplicatesLabel->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->loadDuplicatesLabel->Location = System::Drawing::Point(3, 0);
+			this->loadDuplicatesLabel->Name = L"loadDuplicatesLabel";
+			this->loadDuplicatesLabel->Padding = System::Windows::Forms::Padding(120, 20, 50, 5);
+			this->loadDuplicatesLabel->Size = System::Drawing::Size(170, 38);
+			this->loadDuplicatesLabel->TabIndex = 0;
+			this->loadDuplicatesLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
 			// flowLayoutPanel1
 			// 
@@ -222,13 +244,13 @@ namespace GECBIR {
 			this->flowLayoutPanel1->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
 			this->flowLayoutPanel1->Controls->Add(this->findduplicateBtn);
-			this->flowLayoutPanel1->Controls->Add(this->similarBtn);
+			this->flowLayoutPanel1->Controls->Add(this->findSimilarBtn);
 			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
 			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
 			this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(15);
 			this->flowLayoutPanel1->Name = L"flowLayoutPanel1";
 			this->flowLayoutPanel1->Padding = System::Windows::Forms::Padding(15);
-			this->flowLayoutPanel1->Size = System::Drawing::Size(349, 59);
+			this->flowLayoutPanel1->Size = System::Drawing::Size(400, 59);
 			this->flowLayoutPanel1->TabIndex = 0;
 			// 
 			// deleteBtn
@@ -237,7 +259,7 @@ namespace GECBIR {
 			this->deleteBtn->Name = L"deleteBtn";
 			this->deleteBtn->Size = System::Drawing::Size(82, 23);
 			this->deleteBtn->TabIndex = 3;
-			this->deleteBtn->Text = L"Run Opencv";
+			this->deleteBtn->Text = L"Delete";
 			this->deleteBtn->UseVisualStyleBackColor = true;
 			this->deleteBtn->Click += gcnew System::EventHandler(this, &mainWindow::deleteBtn_Click);
 			// 
@@ -251,14 +273,14 @@ namespace GECBIR {
 			this->findduplicateBtn->UseVisualStyleBackColor = true;
 			this->findduplicateBtn->Click += gcnew System::EventHandler(this, &mainWindow::findduplicateBtn_Click);
 			// 
-			// similarBtn
+			// findSimilarBtn
 			// 
-			this->similarBtn->Location = System::Drawing::Point(209, 18);
-			this->similarBtn->Name = L"similarBtn";
-			this->similarBtn->Size = System::Drawing::Size(82, 23);
-			this->similarBtn->TabIndex = 5;
-			this->similarBtn->Text = L"Find Related";
-			this->similarBtn->UseVisualStyleBackColor = true;
+			this->findSimilarBtn->Location = System::Drawing::Point(209, 18);
+			this->findSimilarBtn->Name = L"findSimilarBtn";
+			this->findSimilarBtn->Size = System::Drawing::Size(82, 23);
+			this->findSimilarBtn->TabIndex = 5;
+			this->findSimilarBtn->Text = L"Find Similar";
+			this->findSimilarBtn->UseVisualStyleBackColor = true;
 			// 
 			// settingsBtnLabel
 			// 
@@ -300,14 +322,14 @@ namespace GECBIR {
 			this->imageBtnLabel->TabIndex = 13;
 			this->imageBtnLabel->Text = L"Images";
 			// 
-			// relatedBtnLabel
+			// similarBtnLabel
 			// 
-			this->relatedBtnLabel->AutoSize = true;
-			this->relatedBtnLabel->Location = System::Drawing::Point(14, 352);
-			this->relatedBtnLabel->Name = L"relatedBtnLabel";
-			this->relatedBtnLabel->Size = System::Drawing::Size(44, 13);
-			this->relatedBtnLabel->TabIndex = 9;
-			this->relatedBtnLabel->Text = L"Related";
+			this->similarBtnLabel->AutoSize = true;
+			this->similarBtnLabel->Location = System::Drawing::Point(14, 352);
+			this->similarBtnLabel->Name = L"similarBtnLabel";
+			this->similarBtnLabel->Size = System::Drawing::Size(37, 13);
+			this->similarBtnLabel->TabIndex = 9;
+			this->similarBtnLabel->Text = L"Similar";
 			// 
 			// duplicatesBtnLabel
 			// 
@@ -318,15 +340,15 @@ namespace GECBIR {
 			this->duplicatesBtnLabel->TabIndex = 11;
 			this->duplicatesBtnLabel->Text = L"Duplicates";
 			// 
-			// relatedBtn
+			// similarBtn
 			// 
-			this->relatedBtn->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->relatedBtn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"relatedBtn.Image")));
-			this->relatedBtn->Location = System::Drawing::Point(10, 301);
-			this->relatedBtn->Name = L"relatedBtn";
-			this->relatedBtn->Size = System::Drawing::Size(52, 51);
-			this->relatedBtn->TabIndex = 8;
-			this->relatedBtn->UseVisualStyleBackColor = true;
+			this->similarBtn->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
+			this->similarBtn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"similarBtn.Image")));
+			this->similarBtn->Location = System::Drawing::Point(10, 301);
+			this->similarBtn->Name = L"similarBtn";
+			this->similarBtn->Size = System::Drawing::Size(52, 51);
+			this->similarBtn->TabIndex = 8;
+			this->similarBtn->UseVisualStyleBackColor = true;
 			// 
 			// duplicatesBtn
 			// 
@@ -411,6 +433,8 @@ namespace GECBIR {
 			this->imagesDisplayPanel->ResumeLayout(false);
 			this->imageOptionsPanel->ResumeLayout(false);
 			this->imageOptionsPanel->PerformLayout();
+			this->auxDisplayPanel->ResumeLayout(false);
+			this->auxDisplayPanel->PerformLayout();
 			this->flowLayoutPanel1->ResumeLayout(false);
 			this->titleBarPanel->ResumeLayout(false);
 			this->titleBarPanel->PerformLayout();
@@ -431,7 +455,7 @@ namespace GECBIR {
 
 
 
-		enum class modes {IMAGES_MODE,FOLDERS_MODE,DUPLICATES_MODE,RELATED_MODE}; 
+		enum class modes {IMAGES_MODE,FOLDERS_MODE,DUPLICATES_MODE,SIMILAR_MODE}; 
 		modes currentmode; 
 		static Workspace * currentWorkspace; 
 		Settings^ settingsWindow ;
@@ -444,11 +468,18 @@ namespace GECBIR {
 		mainWindow(void)
 		{
 			InitializeComponent();
-			InitializeSettings();
-			InitializeDisplayPanel();
-			settingsWindow = gcnew Settings();
+			refreshMainWindow();
 			//TODO: Add the constructor code here
 			//
+		}
+
+		void refreshMainWindow()
+		{
+
+			settingsWindow = gcnew Settings();
+			InitializeSettings();
+			InitializeDisplayPanel();
+			
 		}
 
 
@@ -474,6 +505,7 @@ namespace GECBIR {
 			//for folder path
 			Label^ galleryPath = createLabel(d.path);
 			galleryPath->AutoSize = true;
+			galleryPath->ForeColor = Color::Gray;
 
 			//change label font size
 			float currentSize = galleryPath->Font->Size;
@@ -496,12 +528,6 @@ namespace GECBIR {
 
 			for(int i =0; i < d.imagePaths.size(); i++)
 			{
-				/*PictureBox^ pb = gcnew PictureBox();
-				int imageSize = (displayPanel -> Width)/4.2;
-				pb->Size = System::Drawing::Size(imageSize, imageSize);
-				pb->SizeMode = PictureBoxSizeMode::StretchImage;
-				pb->ImageLocation = getManagedString(std::get<1>(d.imagePaths[i])) ; 
-				pb->SizeMode = PictureBoxSizeMode::Normal;*/
 				String^ imageName = getManagedString(d.imagePaths[i].ImageName);
 				String^ imagePath = getManagedString (d.imagePaths[i].ImagePath);
 				ImageBox^ ib = gcnew ImageBox(imageName, imagePath);
@@ -569,7 +595,7 @@ namespace GECBIR {
 
 		}
 
-		void LoadRelatedDisplayPanel()
+		void LoadSimilarDisplayPanel()
 		{
 
 		}
@@ -623,7 +649,8 @@ namespace GECBIR {
 
 
 	private: System::Void imageBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-
+				 currentWorkspace->InitializeGalleryPath();
+				 refreshMainWindow();
 				 displayPanel->Controls->Clear();
 				 vector<ImageInfo > allImages = currentWorkspace->getAllImageLists();
 				 Dir d = Dir(currentWorkspace->galleryFolderName,currentWorkspace->galleryPath);
@@ -631,40 +658,63 @@ namespace GECBIR {
 				 LoadImagesDisplayPanel(d);
 
 			 }
-	private: System::Void deleteBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 
+	private: System::Void deleteBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				
+				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::auxselectionList);
+				 for(int i =0; i< selectedImagesList.size(); i++)
+				 {
+					 //auxDisplayPanel->Controls->RemoveByKey(getManagedString(selectedImagesList[i])); 
+					 DeleteFile(selectedImagesList[i].c_str());
+				 }
+				 refreshMainWindow();
+				 auxDisplayPanel->Controls->Clear();
+				 
 			 }
 
 
 	private: System::Void findduplicateBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 
-				 vector<string> selectedImagesList = ImageBox::getSelectionListVector();
+				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
 				 auxDisplayPanel->Controls->Clear();
+				 int dupImageCount = 0;
 				 for(int i=0; i<selectedImagesList.size(); i++)
 				 {
-					 ImageAnalyser selectedImage = ImageAnalyser(selectedImagesList[i]);
+					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
+					 ImageAnalyser selectedImage = ImageAnalyser(imginf);
 					 vector<ImageInfo > dupImages = selectedImage.findDuplicates();
 					 if(dupImages.size()>0)
 					 {
-						 LoadDuplicateImages(selectedImage.ImageFullName, dupImages, auxDisplayPanel);
+						 LoadDuplicateImages(selectedImage.imagefile.ImagePath, dupImages, auxDisplayPanel);
 					 }
+					
+					 dupImageCount += dupImages.size();
+					
+				 }
+				 if(!dupImageCount)
+				 {
+					 loadDuplicatesLabel->Text = "No duplicate images found.";
+					 auxDisplayPanel->Controls->Add(loadDuplicatesLabel);
 				 }
 
 			 }
+
 	private: System::Void duplicatesBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-				 vector<ImageInfo > allImagesList = currentWorkspace->getAllImageLists();
-				 displayPanel->Controls->Clear();
-				 for(int i=0; i<allImagesList.size(); i++)
-				 {
-					 ImageAnalyser selectedImage = ImageAnalyser(allImagesList[i].ImagePath);
-					 vector<ImageInfo > dupImages = selectedImage.findDuplicates();
-					 //make a list of duplicate images using hash table image->list of duplicate image locations 
-					 if(dupImages.size()>0)
-					 {
-						 LoadDuplicateImages(selectedImage.ImageFullName, dupImages, displayPanel);
-					 }
-				 }
+				 //vector<ImageInfo > allImagesList = currentWorkspace->getAllImageLists();
+				 //displayPanel->Controls->Clear();
+				 //for(int i=0; i<allImagesList.size(); i++)
+				 //{
+					// ImageAnalyser selectedImage = ImageAnalyser(allImagesList[i]);
+					// vector<ImageInfo > dupImages = selectedImage.findDuplicates();
+					// //make a list of duplicate images using hash table image->list of duplicate image locations 
+					// if(dupImages.size()>0)
+					// {
+					//	 LoadDuplicateImages(selectedImage.imagefile.ImagePath, dupImages, displayPanel);
+					// }
+				 //}
 			 }
+private: System::Void auxDisplayPanel_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+		 }
 };
 
 }

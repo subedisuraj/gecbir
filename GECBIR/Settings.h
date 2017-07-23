@@ -1,4 +1,7 @@
 #pragma once
+#include <iostream>
+#include <fstream>
+#include "Workspace.h"
 
 namespace GECBIR {
 
@@ -15,13 +18,19 @@ namespace GECBIR {
 	public ref class Settings : public System::Windows::Forms::Form
 	{
 
-	String^ galleryLocation; 
+	public:	static String^ galleryLocation; 
+			FolderBrowserDialog^ fd;
 		
 	public:
 		Settings(void)
 		{
 			InitializeComponent();
-	
+			std::ifstream myfile;
+			myfile.open ("settings.txt");
+			string settingstxt;
+			myfile >> settingstxt;
+			galleryLocation = getManagedString(settingstxt);
+			myfile.close();
 			//
 			//TODO: Add the constructor code here
 			//
@@ -142,6 +151,12 @@ namespace GECBIR {
 
 
 	private: System::Void okBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+				 
+				 galleryLocation = galleryPath->Text;
+				 std::ofstream myfile;
+				 myfile.open ("settings.txt");
+				 myfile << getUnmanagedString( galleryLocation);
+				 myfile.close();
 				 this->Hide();			 
 			 }
 
@@ -151,12 +166,10 @@ namespace GECBIR {
 
 
 	private: System::Void browseBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-				 FolderBrowserDialog^ fd = gcnew FolderBrowserDialog();
+				 fd  = gcnew FolderBrowserDialog();
 				 if((bool)fd->ShowDialog())
 				 {
-				
 				 galleryPath->Text = fd->SelectedPath;
-				 galleryLocation = galleryPath->Text;
 				 }
     
 			 }

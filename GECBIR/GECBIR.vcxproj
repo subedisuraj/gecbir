@@ -166,7 +166,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu" />
+    <CudaCompile Include="ImageAnalyserParallel.cu" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -177,7 +177,6 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ImageAnalyser.cpp" />
-    <ClCompile Include="ImageAnalyserParallel.cu" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="mainWindow.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</CompileAsManaged>
@@ -236,6 +235,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </EmbeddedResource>
     <EmbeddedResource Include="Settings.resx">
       <DependentUpon>Settings.h</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

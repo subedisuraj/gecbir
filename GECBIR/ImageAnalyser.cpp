@@ -2,15 +2,15 @@
 #include "Imagebox.h"
 #include "mainWindow.h"
 
-#define IMAGE_SIZE 256
+#define IMAGE_SIZE 64
 using namespace cv;
 using std::cout;
 
 namespace GECBIR {
-ImageAnalyser::ImageAnalyser(string ImagePath)
+ImageAnalyser::ImageAnalyser(ImageInfo imginf)
 {
-	this->ImageFullName = ImagePath;
-	IplImage* imgdat  = cvLoadImage(ImagePath.c_str(), CV_LOAD_IMAGE_COLOR);
+	this->imagefile = imginf;
+	IplImage* imgdat  = cvLoadImage(imginf.ImagePath.c_str(), CV_LOAD_IMAGE_COLOR);
 	IplImage *resizedImage = ResizeImage(imgdat);
 	Mat(resizedImage, false);
 	this->ImageData = resizedImage;
@@ -21,9 +21,10 @@ ImageAnalyser::ImageAnalyser(string ImagePath)
 
 IplImage * ImageAnalyser::ResizeImage(IplImage * source)
 {
-	IplImage *destination = cvCreateImage ( cvSize(IMAGE_SIZE, IMAGE_SIZE ), source->depth, source->nChannels);
+	IplImage *destination = cvCreateImage ( cvSize(IMAGE_SIZE, IMAGE_SIZE ), 8, source->nChannels);
 	cvResize(source, destination);
 	return destination;
+	
 }
 
 
@@ -35,14 +36,14 @@ void ImageAnalyser::DisplayImage()
 		return ;
 	}
 	namedWindow("Picture", CV_WINDOW_NORMAL);
-	imshow(this->ImageFullName, this->ImageData);
+	imshow(this->imagefile.ImageName, this->ImageData);
 }
 
 
 bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 {
 #ifndef RUN_PIXEL_PARALLEL
-	ImageAnalyser otherImg = ImageAnalyser(OtherImagePath);
+	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
 	int R = this->ImageData.rows;
 	int C = this->ImageData.rows;
 	int Ch = 3;
@@ -65,16 +66,23 @@ bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 
 }
 
+bool ImageAnalyser::CompareImageSimilarity(string OtherImagePath)
+{
+	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
+
+	return false;
+}
+
 vector<ImageInfo > ImageAnalyser::findDuplicates()
 {
 	vector<ImageInfo > dupImages = vector<ImageInfo>();
-	ImageAnalyser selectedImage = ImageAnalyser(this->ImageFullName);
-	vector<ImageInfo > allImagesinGallery =  mainWindow::currentWorkspace->getAllImageLists();
-	for(int j = 0; j<allImagesinGallery.size(); j++)
+	ImageAnalyser selectedImage = ImageAnalyser(this->imagefile);
+	vector<ImageInfo > &allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+	for(int j = 0; j<mainWindow::currentWorkspace->allImagesinGallery.size(); j++)
 	{
-		string otherImageName = allImagesinGallery[j].ImageName; 
-		string otherImageFullName = allImagesinGallery[j].ImagePath;
-		if(selectedImage.ImageFullName != otherImageFullName )
+		string otherImageName = allImagesinCurGallery[j].ImageName; 
+		string otherImageFullName = allImagesinCurGallery[j].ImagePath;
+		if(selectedImage.imagefile.ImagePath != otherImageFullName )
 		{
 			bool equalImages = selectedImage.CompareImageEquality(otherImageFullName);
 			if(equalImages)
@@ -85,6 +93,49 @@ vector<ImageInfo > ImageAnalyser::findDuplicates()
 	}
 	return dupImages;
 }
+
+
+vector<ImageInfo>  ImageAnalyser::findSimilarImages(string ImagePath)
+{
+	vector<ImageInfo > simImages = vector<ImageInfo>();
+	ImageAnalyser selectedImage = ImageAnalyser(this->imagefile);
+	vector<ImageInfo > &allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+	for(int j = 0; j<mainWindow::currentWorkspace->allImagesinGallery.size(); j++)
+	{
+		string otherImageName = allImagesinCurGallery[j].ImageName; 
+		string otherImageFullName = allImagesinCurGallery[j].ImagePath;
+		if(selectedImage.imagefile.ImagePath != otherImageFullName )
+		{
+			bool similarImages = selectedImage.CompareImageSimilarity(otherImageFullName);
+			if(similarImages)
+			{
+				simImages.push_back(ImageInfo(otherImageName,otherImageFullName));
+			}
+		}
+	}
+	return simImages;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

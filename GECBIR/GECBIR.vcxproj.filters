@@ -26,11 +26,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="kernel.cu">
-      <Filter>Source</Filter>
-    </CudaCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="mainWindow.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -40,8 +35,10 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="ImageAnalyser.cpp" />
-    <ClCompile Include="ImageAnalyserParallel.cu">
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="ImageAnalyserParallel.cu">
       <Filter>Source</Filter>
-    </ClCompile>
+    </CudaCompile>
   </ItemGroup>
 </Project>

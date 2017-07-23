@@ -8,6 +8,7 @@
 #include <tuple>
 #include <Windows.h>
 
+namespace GECBIR{
 
 using std::vector;
 using std::tuple;
@@ -28,6 +29,7 @@ public:
 	string galleryPath;
 	string galleryFolderName;
 	vector<Dir> directoryList;
+	vector<ImageInfo > allImagesinGallery;
 	
 
 public:
@@ -36,6 +38,7 @@ public:
 	void getImageListsinGallery(String^ foldername, String^ folderpath);
 	vector<ImageInfo > getAllImageLists();  //Name , Path
 	Dir Workspace::getImageListsInDir(String^ foldername, String^ folderpath);
+	void InitializeGalleryPath();
 	
 };
 
@@ -73,3 +76,4 @@ public:
 	}
 };
 
+}

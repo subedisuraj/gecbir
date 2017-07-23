@@ -22,7 +22,7 @@ namespace GECBIR {
 
 		ImageBox(String^imgName, String^imgPath )
 		{
-
+			this->Name = imgPath; 
 			InitializeComponent();
 			isSelected = false;
 			this->imageId = imageId++;
@@ -50,6 +50,7 @@ namespace GECBIR {
 
 	public:	String^ imagePath;
 	static	 set<string> * selectionList = new set<string>();
+	static	 set<string> * auxselectionList = new set<string>();
 			
 
 	protected: 
@@ -100,8 +101,7 @@ namespace GECBIR {
 			this->Controls->Add(this->imgName);
 			this->Controls->Add(this->pictureBox1);
 			this->Name = L"ImageBox";
-			this->Size = System::Drawing::Size(194, 213);
-			this->Click += gcnew System::EventHandler(this, &ImageBox::ImageBox_Click);
+			this->Size = System::Drawing::Size(194, 236);
 			this->MouseLeave += gcnew System::EventHandler(this, &ImageBox::ImageBox_MouseLeave);
 			this->MouseHover += gcnew System::EventHandler(this, &ImageBox::ImageBox_MouseHover);
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^  >(this->pictureBox1))->EndInit();
@@ -121,9 +121,9 @@ namespace GECBIR {
 			this->imgName->Text = imgName;
 		}
 
-		static vector<string> getSelectionListVector()
+		static vector<string> getSelectionListVector(set<string> * selectionset)
 		{
-			std::set<string>& selectionListValue = *selectionList;
+			std::set<string>& selectionListValue = *selectionset;
 			std::vector<string> selectionListVector(selectionListValue.size());
 			std::copy(selectionListValue.begin(), selectionListValue.end(), selectionListVector.begin());
 			return selectionListVector;
@@ -135,14 +135,20 @@ namespace GECBIR {
 				 if( this->isSelected )
 				 {
 					 this->isSelected = false;
-					 selectionList->erase(getUnmanagedString( this->imagePath));
+					 if(this->Parent->Parent->Name == "displayPanel")
+						selectionList->erase(getUnmanagedString( this->imagePath));
+					 else
+						 auxselectionList->erase(getUnmanagedString( this->imagePath));
 					 this->BackColor=SystemColors::Control;
 				 }
 				 
 				 else
 				 {
 					 this->isSelected = true;
-					 selectionList->insert(getUnmanagedString( this->imagePath));
+					 if(this->Parent->Parent->Name == "displayPanel")
+						selectionList->insert(getUnmanagedString( this->imagePath));
+					 else
+						 auxselectionList->insert(getUnmanagedString( this->imagePath));
 					 this->BackColor=System::Drawing::Color::LightBlue;
 				 } 
 

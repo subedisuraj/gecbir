@@ -1,7 +1,8 @@
 #include "Workspace.h"
+#include "Settings.h"
 
 
-
+namespace GECBIR{
 using namespace std;
 
 
@@ -17,11 +18,20 @@ string getUnmanagedString(String^ managedString);
 
 Workspace::Workspace(void)
 {
-	galleryPath = "C:\\Users\\ss0193\\Desktop\\MyGallery\\";
+	
+	InitializeGalleryPath();
 	DirectoryInfo^ dir = gcnew DirectoryInfo(getManagedString(galleryPath));
 	galleryFolderName = getUnmanagedString( dir->Name);
 	getImageListsinGallery(dir->Name, dir->FullName);
+	allImagesinGallery = getAllImageLists();
 
+}
+
+void Workspace::InitializeGalleryPath()
+{
+	galleryPath = getUnmanagedString(Settings::galleryLocation);
+	if(galleryPath=="")
+		galleryPath = "C:\\Users\\ss0193\\Desktop\\MyGallery\\";
 }
 
 Dir Workspace::getImageListsInDir(String^ foldername, String^ folderpath)
@@ -79,4 +89,5 @@ String^ getManagedString(string unmanagedString)
 string getUnmanagedString(String^ managedString)
 {
 	return msclr::interop::marshal_as<std::string>(managedString);
+}
 }
