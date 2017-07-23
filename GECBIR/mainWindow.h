@@ -225,7 +225,7 @@ namespace GECBIR {
 			this->auxDisplayPanel->Name = L"auxDisplayPanel";
 			this->auxDisplayPanel->Size = System::Drawing::Size(400, 581);
 			this->auxDisplayPanel->TabIndex = 1;
-			this->auxDisplayPanel->Paint += gcnew System::Windows::Forms::PaintEventHandler(this, &mainWindow::auxDisplayPanel_Paint);
+			
 			// 
 			// loadDuplicatesLabel
 			// 
@@ -281,6 +281,7 @@ namespace GECBIR {
 			this->findSimilarBtn->TabIndex = 5;
 			this->findSimilarBtn->Text = L"Find Similar";
 			this->findSimilarBtn->UseVisualStyleBackColor = true;
+			this->findSimilarBtn->Click += gcnew System::EventHandler(this, &mainWindow::findSimilarBtn_Click);
 			// 
 			// settingsBtnLabel
 			// 
@@ -713,7 +714,31 @@ namespace GECBIR {
 					// }
 				 //}
 			 }
-private: System::Void auxDisplayPanel_Paint(System::Object^  sender, System::Windows::Forms::PaintEventArgs^  e) {
+
+
+private: System::Void findSimilarBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+			  vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
+				 auxDisplayPanel->Controls->Clear();
+				 int dupImageCount = 0;
+				 for(int i=0; i<selectedImagesList.size(); i++)
+				 {
+					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
+					 ImageAnalyser selectedImage = ImageAnalyser(imginf);
+					 vector<ImageInfo > dupImages = selectedImage.findSimilarImages();
+					 if(dupImages.size()>0)
+					 {
+						 LoadDuplicateImages(selectedImage.imagefile.ImagePath, dupImages, auxDisplayPanel);
+					 }
+					
+					 dupImageCount += dupImages.size();
+					
+				 }
+				 if(!dupImageCount)
+				 {
+					 loadDuplicatesLabel->Text = "No similar images found.";
+					 auxDisplayPanel->Controls->Add(loadDuplicatesLabel);
+				 }
+
 		 }
 };
 

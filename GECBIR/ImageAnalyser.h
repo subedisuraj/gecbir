@@ -34,7 +34,7 @@ public:
 	bool CompareImageEquality(string OtherImagePath);
 	bool CompareImageSimilarity(string OtherImagePath);
 	vector<ImageInfo> findDuplicates(); 
-	vector<ImageInfo>  findSimilarImages(string ImagePath);
+	vector<ImageInfo>  findSimilarImages();
 	void ImageAnalyser::DisplayImage();
 };
 

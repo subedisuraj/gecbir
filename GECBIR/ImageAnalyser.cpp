@@ -2,7 +2,8 @@
 #include "Imagebox.h"
 #include "mainWindow.h"
 
-#define IMAGE_SIZE 64
+#define IMAGE_SIZE 256
+#define SIMILARITY_TOLERANCE 0.75 //value between 0 and 1
 using namespace cv;
 using std::cout;
 
@@ -68,7 +69,33 @@ bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 
 bool ImageAnalyser::CompareImageSimilarity(string OtherImagePath)
 {
+	Mat hsv_this, hsv_other;
 	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
+	cvtColor( this->ImageData, hsv_this, COLOR_BGR2HSV );
+    cvtColor( otherImg.ImageData, hsv_other, COLOR_BGR2HSV );
+	int channels[] = { 0, 1 };
+	MatND hist_this, hist_other;
+
+	/// Using 50 bins for hue and 60 for saturation
+    int h_bins = 50; int s_bins = 60;
+    int histSize[] = { h_bins, s_bins };
+
+    // hue varies from 0 to 179, saturation from 0 to 255
+    float h_ranges[] = { 0, 180 };
+    float s_ranges[] = { 0, 256 };
+
+	const float* ranges[] = { h_ranges, s_ranges };
+
+	calcHist( &hsv_this, 1, channels, Mat(), hist_this, 2, histSize, ranges, true, false );
+    normalize( hist_this, hist_this, 0, 1, NORM_MINMAX, -1, Mat() );
+
+	calcHist( &hsv_other, 1, channels, Mat(), hist_other, 2, histSize, ranges, true, false );
+    normalize( hist_other, hist_other, 0, 1, NORM_MINMAX, -1, Mat() );
+
+	double similarityMetrics = compareHist( hist_this, hist_other, 3 );
+
+	if(similarityMetrics < SIMILARITY_TOLERANCE)
+		return true;
 
 	return false;
 }
@@ -95,7 +122,7 @@ vector<ImageInfo > ImageAnalyser::findDuplicates()
 }
 
 
-vector<ImageInfo>  ImageAnalyser::findSimilarImages(string ImagePath)
+vector<ImageInfo>  ImageAnalyser::findSimilarImages()
 {
 	vector<ImageInfo > simImages = vector<ImageInfo>();
 	ImageAnalyser selectedImage = ImageAnalyser(this->imagefile);
