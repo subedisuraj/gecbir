@@ -9,7 +9,7 @@
 #include <set>
 #include "Workspace.h"
 
-#ifndef RUN_PIXEL_PARALLEL
+#ifndef RUN_PARALLEL
 //#define RUN_PARALLEL
 #endif
 

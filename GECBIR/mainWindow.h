@@ -225,7 +225,6 @@ namespace GECBIR {
 			this->auxDisplayPanel->Name = L"auxDisplayPanel";
 			this->auxDisplayPanel->Size = System::Drawing::Size(400, 581);
 			this->auxDisplayPanel->TabIndex = 1;
-			
 			// 
 			// loadDuplicatesLabel
 			// 

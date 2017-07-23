@@ -43,7 +43,7 @@ void ImageAnalyser::DisplayImage()
 
 bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 {
-#ifndef RUN_PIXEL_PARALLEL
+#ifndef RUN_PARALLEL
 	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
 	int R = this->ImageData.rows;
 	int C = this->ImageData.rows;
@@ -71,9 +71,22 @@ bool ImageAnalyser::CompareImageSimilarity(string OtherImagePath)
 {
 	Mat hsv_this, hsv_other;
 	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
+
+
 	cvtColor( this->ImageData, hsv_this, COLOR_BGR2HSV );
     cvtColor( otherImg.ImageData, hsv_other, COLOR_BGR2HSV );
-	int channels[] = { 0, 1 };
+
+	//hsv_this = this->ImageData;
+	//hsv_other = otherImg.ImageData;
+
+
+	//TODO:: data of the image file in hsv format can be obtained and transferred using the pointer
+	 Mat C = (Mat_<uchar>(3,3) << 1, 2, 3, 4, 5, 5, 6, 7, 0);
+	// uchar *Cdata = C.data;
+	 uchar *Cdata = hsv_this.data;
+
+
+	int channels[] = { 0, 1, 2 };
 	MatND hist_this, hist_other;
 
 	/// Using 50 bins for hue and 60 for saturation
