@@ -11,6 +11,7 @@
     <ClInclude Include="ImageAnalyserParallel.h">
       <Filter>Source</Filter>
     </ClInclude>
+    <ClInclude Include="Histogram.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="mainWindow.resx" />
@@ -35,6 +36,7 @@
     <ClCompile Include="Settings.cpp" />
     <ClCompile Include="ImageBox.cpp" />
     <ClCompile Include="ImageAnalyser.cpp" />
+    <ClCompile Include="Histogram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="ImageAnalyserParallel.cu">

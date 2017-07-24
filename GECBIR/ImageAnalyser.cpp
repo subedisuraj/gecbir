@@ -2,8 +2,7 @@
 #include "Imagebox.h"
 #include "mainWindow.h"
 
-#define IMAGE_SIZE 256
-#define SIMILARITY_TOLERANCE 0.75 //value between 0 and 1
+
 using namespace cv;
 using std::cout;
 

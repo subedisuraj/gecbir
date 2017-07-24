@@ -5,6 +5,7 @@
 #include "Settings.h"
 #include "ImageBox.h"
 #include "ImageAnalyser.h"
+#include "ImageAnalyserParallel.h"
 #include <stdio.h>
 
 namespace GECBIR {
@@ -70,6 +71,7 @@ namespace GECBIR {
 
 	private: System::Windows::Forms::FlowLayoutPanel^  auxDisplayPanel;
 	private: System::Windows::Forms::Label^  loadDuplicatesLabel;
+	private: System::Windows::Forms::Button^  button1;
 
 
 
@@ -107,6 +109,7 @@ namespace GECBIR {
 			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->findduplicateBtn = (gcnew System::Windows::Forms::Button());
 			this->findSimilarBtn = (gcnew System::Windows::Forms::Button());
+			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->settingsBtnLabel = (gcnew System::Windows::Forms::Label());
 			this->imageBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtn = (gcnew System::Windows::Forms::Button());
@@ -244,6 +247,7 @@ namespace GECBIR {
 			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
 			this->flowLayoutPanel1->Controls->Add(this->findduplicateBtn);
 			this->flowLayoutPanel1->Controls->Add(this->findSimilarBtn);
+			this->flowLayoutPanel1->Controls->Add(this->button1);
 			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
 			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
 			this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(15);
@@ -281,6 +285,16 @@ namespace GECBIR {
 			this->findSimilarBtn->Text = L"Find Similar";
 			this->findSimilarBtn->UseVisualStyleBackColor = true;
 			this->findSimilarBtn->Click += gcnew System::EventHandler(this, &mainWindow::findSimilarBtn_Click);
+			// 
+			// button1
+			// 
+			this->button1->Location = System::Drawing::Point(297, 18);
+			this->button1->Name = L"button1";
+			this->button1->Size = System::Drawing::Size(75, 23);
+			this->button1->TabIndex = 1;
+			this->button1->Text = L"cuda";
+			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &mainWindow::button1_Click_1);
 			// 
 			// settingsBtnLabel
 			// 
@@ -716,13 +730,19 @@ namespace GECBIR {
 
 
 private: System::Void findSimilarBtn_Click(System::Object^  sender, System::EventArgs^  e) {
-			  vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
+				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
 				 auxDisplayPanel->Controls->Clear();
 				 int dupImageCount = 0;
 				 for(int i=0; i<selectedImagesList.size(); i++)
 				 {
 					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
 					 ImageAnalyser selectedImage = ImageAnalyser(imginf);
+//#ifdef RUN_PARALLEL
+//					 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+//					 unsigned int * imageData =  selectedImage.ImageData.data;
+//					 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize  );
+////#else
+//#endif
 					 vector<ImageInfo > dupImages = selectedImage.findSimilarImages();
 					 if(dupImages.size()>0)
 					 {
@@ -738,6 +758,9 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 					 auxDisplayPanel->Controls->Add(loadDuplicatesLabel);
 				 }
 
+		 }
+private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
+			 addcuda();
 		 }
 };
 
