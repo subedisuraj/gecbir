@@ -738,10 +738,11 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
 					 ImageAnalyser selectedImage = ImageAnalyser(imginf);
 //#ifdef RUN_PARALLEL
-//					 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
-//					 unsigned int * imageData =  selectedImage.ImageData.data;
-//					 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize  );
-////#else
+					 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+					 uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+					 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+					 selectedImageParallel.ComputeHistogram();
+//#else
 //#endif
 					 vector<ImageInfo > dupImages = selectedImage.findSimilarImages();
 					 if(dupImages.size()>0)
