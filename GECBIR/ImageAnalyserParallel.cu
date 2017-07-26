@@ -78,6 +78,10 @@ __global__ void histo_kernel(uchar3* d_Imgdata, int3* d_histo , unsigned int dat
 	int idx = blockDim.x * blockIdx.x + threadIdx.x;
 	if(idx < data_size)
 	{
+	d_histo[idx].x = 0;
+	d_histo[idx].y = 0;
+	d_histo[idx].z = 0;
+	__syncthreads();
 	atomicAdd(&(d_histo[d_Imgdata[idx].x].x),(int)1);
 	atomicAdd(&(d_histo[d_Imgdata[idx].y].y),(int)1);
 	atomicAdd(&(d_histo[d_Imgdata[idx].z].z),(int)1);
@@ -215,5 +219,14 @@ bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherIm
 	return false;
 }
 
+
+bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage)
+{
+	/*otherImage.ComputeHistogram();
+	double3 similarityScore =  findBhattacharyaDistance(this->HistoData, otherImage.HistoData);
+	if(similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL)
+		return true;*/
+	return false;
+}
 
 }

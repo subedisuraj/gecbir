@@ -31,7 +31,8 @@ public:
 	ImageAnalyserParallel(uchar3* data, int dataSize);
 
 	int * ComputeHistogram();
-	bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImageFullName);
+	bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImage);
+	bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage);
 };
 
 }

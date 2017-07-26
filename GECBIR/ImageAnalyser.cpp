@@ -2,7 +2,7 @@
 #include "Imagebox.h"
 #include "mainWindow.h"
 
-
+//#define RUN_PARALLEL
 using namespace cv;
 using std::cout;
 
@@ -124,7 +124,22 @@ vector<ImageInfo > ImageAnalyser::findDuplicates()
 		string otherImageFullName = allImagesinCurGallery[j].ImagePath;
 		if(selectedImage.imagefile.ImagePath != otherImageFullName )
 		{
+
+#ifdef RUN_PARALLEL
+			unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+			uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+			ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+
+			ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
+			uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
+			ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
+			bool equalImages = selectedImageParallel.CompareImageEquality(otherImageParallel);
+
+#else
 			bool equalImages = selectedImage.CompareImageEquality(otherImageFullName);
+
+#endif
+			
 			if(equalImages)
 			{
 				dupImages.push_back(ImageInfo(otherImageName,otherImageFullName));
