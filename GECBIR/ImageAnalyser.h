@@ -9,7 +9,7 @@
 #include <set>
 #include "Workspace.h"
 
-#define IMAGE_SIZE 256
+#define IMAGE_SIZE 512
 #define SIMILARITY_TOLERANCE 0.75 //value between 0 and 1
 
 #ifndef RUN_PARALLEL

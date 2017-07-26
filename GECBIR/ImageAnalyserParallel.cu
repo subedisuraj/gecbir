@@ -73,8 +73,6 @@ cudaError_t InitializeDevice()
 }
 
 
-
-
 __global__ void histo_kernel(uchar3* d_Imgdata, int3* d_histo , unsigned int data_size)
 {
 	int idx = blockDim.x * blockIdx.x + threadIdx.x;
@@ -128,7 +126,6 @@ double3 findBhattacharyaDistance(int3 * hist1, int3 * hist2)
 	score.x = sqrt(1 - ( 1/ sqrt(mean1.x * mean2.x * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.x);
 	score.y = sqrt(1 - ( 1/ sqrt(mean1.y * mean2.y * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.y);
 	score.z = sqrt(1 - ( 1/ sqrt(mean1.z * mean2.z * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.z);
-
 
 	return score;
 }
@@ -206,6 +203,7 @@ ImageAnalyserParallel::ImageAnalyserParallel( uchar3 * data, int dataSize)
 	PixelData = data;
 	size_of_data = dataSize;
 }
+
 
 
 bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImage)

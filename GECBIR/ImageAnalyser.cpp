@@ -106,6 +106,7 @@ bool ImageAnalyser::CompareImageSimilarity(string OtherImagePath)
 
 	double similarityMetrics = compareHist( hist_this, hist_other, 3 );
 
+
 	if(similarityMetrics < SIMILARITY_TOLERANCE)
 		return true;
 
@@ -146,7 +147,7 @@ vector<ImageInfo>  ImageAnalyser::findSimilarImages()
 		if(selectedImage.imagefile.ImagePath != otherImageFullName )
 		{
 
-#ifndef RUN_PARALLEL
+#ifdef RUN_PARALLEL
 			unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
 			uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
 			ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);

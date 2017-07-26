@@ -11,7 +11,8 @@
 //#include "Workspace.h"
 
 #define SIMILARITY_TOLERANCE_PARALLEL 0.35 
-#define HISTOGRAM_BINS_SIZE 256
+#define HISTOGRAM_BINS_SIZE 512
+
 
 using std::string;
 using std::vector;
