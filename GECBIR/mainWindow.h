@@ -737,13 +737,6 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 				 {
 					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
 					 ImageAnalyser selectedImage = ImageAnalyser(imginf);
-//#ifdef RUN_PARALLEL
-					 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
-					 uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
-					 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
-				//	 selectedImageParallel.ComputeHistogram();
-//#else
-//#endif
 					 vector<ImageInfo > dupImages = selectedImage.findSimilarImages();
 					 if(dupImages.size()>0)
 					 {
@@ -762,6 +755,13 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 		 }
 private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
 		
+			  using namespace cv;
+			  Mat C = (Mat_<uchar>(4,3) << 
+				  0, 1, 1, 1,1,1,
+				  2, 3, 3, 2,2,2);
+			  uchar3 *Cdata = (uchar3 *)C.data;
+			  ImageAnalyserParallel a = ImageAnalyserParallel(Cdata, 9);
+			  a.ComputeHistogram();
 		 }
 };
 

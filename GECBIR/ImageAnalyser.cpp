@@ -145,7 +145,22 @@ vector<ImageInfo>  ImageAnalyser::findSimilarImages()
 		string otherImageFullName = allImagesinCurGallery[j].ImagePath;
 		if(selectedImage.imagefile.ImagePath != otherImageFullName )
 		{
+
+#ifndef RUN_PARALLEL
+			unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+			uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+			ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+			selectedImageParallel.ComputeHistogram();
+
+			ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
+			uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
+			ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
+			bool similarImages = selectedImageParallel.CompareImageSimilarity(otherImageParallel);
+#else
+
 			bool similarImages = selectedImage.CompareImageSimilarity(otherImageFullName);
+
+#endif
 			if(similarImages)
 			{
 				simImages.push_back(ImageInfo(otherImageName,otherImageFullName));

@@ -9,6 +9,8 @@
 #include <string>
 #include "ImageInfo.h"
 //#include "Workspace.h"
+
+#define SIMILARITY_TOLERANCE_PARALLEL 0.35 
 #define HISTOGRAM_BINS_SIZE 256
 
 using std::string;
@@ -26,9 +28,9 @@ public:
 public:
 
 	ImageAnalyserParallel(uchar3* data, int dataSize);
+
 	int * ComputeHistogram();
-	vector<ImageInfo>  ImageAnalyserParallel::findSimilarImages();
-	bool ImageAnalyserParallel::CompareImageSimilarity(string otherImageFullName);
+	bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImageFullName);
 };
 
 }
