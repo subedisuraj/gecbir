@@ -94,6 +94,73 @@ __global__ void histo_kernel(uchar3* d_Imgdata, int3* d_histo , unsigned int dat
 
 
 
+double findBhattacharyaDistance(int3 * hist1, int3 * hist2)
+{
+	
+//	int* data;
+//int num;
+//int3 x =  {0,0,0};
+//thrust::device_vector< int3 > iVec(hist1,hist1+3);
+//
+//// transfer to device and compute sum
+//int3 sum = thrust::reduce(iVec.begin(), iVec.end(), x , thrust::plus<int3>());
+//int3 mean = sum/(double)num;
+//
+//   
+//    float h2_R = mean(hist2);
+//
+//    
+//    float score = 0;
+//    for( int = 0; i< size(hist1); i++){
+//        score += math.sqrt( hist1[i] * hist2[i] );
+//	}
+//    score = math.sqrt( 1 - ( 1 / math.sqrt(h1_*h2_*8*8) ) * score );
+//    return score;
+
+
+
+	int3 sum1 ={0,0,0}, sum2 = {0,0,0}; 
+	for(int i =0; i<HISTOGRAM_BINS_SIZE; i++)
+	{
+		sum1.x += hist1[i].x ;
+		sum1.y += hist1[i].y;
+		sum1.z += hist1[i].z;
+
+		sum2.x += hist2[i].x;
+		sum2.y += hist2[i].y;
+		sum2.z += hist2[i].z;
+	}
+
+	double3 mean1, mean2;
+
+	mean1.x = sum1.x/(double)HISTOGRAM_BINS_SIZE ;
+	mean1.y = sum1.y/(double)HISTOGRAM_BINS_SIZE ;
+	mean1.z = sum1.z/(double)HISTOGRAM_BINS_SIZE ;
+
+	mean2.x = sum1.x/(double)HISTOGRAM_BINS_SIZE ;
+	mean2.y = sum1.y/(double)HISTOGRAM_BINS_SIZE ;
+	mean2.z = sum1.z/(double)HISTOGRAM_BINS_SIZE ;
+
+	double3 score = {0.0,0.0,0.0};
+
+	for(int i =0; i<HISTOGRAM_BINS_SIZE; i++)
+	{
+		score.x += sqrt(hist1[i].x * hist2[i].x);
+		score.y += sqrt(hist1[i].y * hist2[i].y);
+		score.z += sqrt(hist1[i].z * hist2[i].z);
+
+	}
+
+	score.x = sqrt(1 - ( 1/ sqrt(mean1.x * mean2.x * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.x);
+	score.y = sqrt(1 - ( 1/ sqrt(mean1.y * mean2.y * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.y);
+	score.z = sqrt(1 - ( 1/ sqrt(mean1.z * mean2.z * HISTOGRAM_BINS_SIZE * HISTOGRAM_BINS_SIZE )) * score.z);
+
+
+    return (score.x + score.y + score.z)/3;
+}
+
+
+
 int addcuda()
 {
     const int arraySize = 5;
@@ -171,6 +238,7 @@ int * ImageAnalyserParallel::ComputeHistogram()
     }
 
 	this->HistoData = histo_data;
+	double simi = findBhattacharyaDistance(histo_data, histo_data);
 
 Error:
 	cudaFree(d_ImageData);

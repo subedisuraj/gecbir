@@ -4,6 +4,7 @@
 #include "device_functions.h"
 #include <stdio.h>
 #include <windows.h>
+#include <cmath>
 #define HISTOGRAM_BINS_SIZE 256
 
 namespace GECBIR {
