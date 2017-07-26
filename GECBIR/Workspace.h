@@ -7,6 +7,7 @@
 #include <vector>
 #include <tuple>
 #include <Windows.h>
+#include "ImageInfo.h"
 
 namespace GECBIR{
 
@@ -22,7 +23,6 @@ String^ getManagedString(string unmanagedString);
 string getUnmanagedString(String^ managedString);
 
 class Dir;
-class ImageInfo;
 class Workspace
 {
 public:
@@ -61,19 +61,6 @@ public:
 
 };
 
-class ImageInfo
-{
-public:
-	string ImageName;
-	string ImagePath;
-	string ImageID;
 
-	ImageInfo(){};
-	ImageInfo(string imgName, string imgPath)
-	{
-		ImageName = imgName;
-		ImagePath = imgPath;
-	}
-};
 
 }

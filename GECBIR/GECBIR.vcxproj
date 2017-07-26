@@ -223,6 +223,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     <ClInclude Include="ImageBox.h">
       <FileType>CppControl</FileType>
     </ClInclude>
+    <ClInclude Include="ImageInfo.h" />
     <ClInclude Include="mainWindow.h">
       <FileType>CppForm</FileType>
     </ClInclude>

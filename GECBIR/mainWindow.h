@@ -741,7 +741,7 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 					 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
 					 uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
 					 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
-					 selectedImageParallel.ComputeHistogram();
+				//	 selectedImageParallel.ComputeHistogram();
 //#else
 //#endif
 					 vector<ImageInfo > dupImages = selectedImage.findSimilarImages();

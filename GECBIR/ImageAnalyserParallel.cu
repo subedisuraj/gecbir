@@ -222,6 +222,29 @@ ImageAnalyserParallel::ImageAnalyserParallel( uchar3 * data, int dataSize)
 	size_of_data = dataSize;
 }
 
+vector<string>  findSimilarImages()
+{
+	vector<string > simImages = vector<string>();
+	////ImageAnalyserParallel selectedImage = ImageAnalyser(this->imagefile);
+	//vector<ImageInfo > &allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+	//for(int j = 0; j<allImagesinCurGallery.size(); j++)
+	//{
+	//	string otherImageName = allImagesinCurGallery[j].ImageName; 
+	//	string otherImageFullName = allImagesinCurGallery[j].ImagePath;
+
+	//		bool similarImages = this->CompareImageSimilarity(otherImageFullName);
+	//		if(similarImages)
+	//		{
+	//			simImages.push_back(otherImageFullName);
+	//		}
+	//}
+	return simImages;
+}
+
+bool ImageAnalyserParallel::CompareImageSimilarity(string otherImageFullName)
+{
+	return false;
+}
 
 
 }
