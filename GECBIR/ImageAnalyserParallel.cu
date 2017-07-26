@@ -2,7 +2,7 @@
 
 namespace GECBIR{
 
-cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size);
+
 
 uchar3 * allocatecudaMemoryUchar3(uchar3 * hostdata, unsigned int dataSize, bool copyMemory)
 {
@@ -71,11 +71,6 @@ cudaError_t InitializeDevice()
 	return cudaStatus;
 }
 
-__global__ void addKernel(int *c, const int *a, const int *b)
-{
-    int i = threadIdx.x;
-    c[i] = a[i] + b[i];
-}
 
 
 
@@ -161,34 +156,6 @@ double findBhattacharyaDistance(int3 * hist1, int3 * hist2)
 
 
 
-int addcuda()
-{
-    const int arraySize = 5;
-    const int a[arraySize] = { 1, 2, 3, 4, 5 };
-    const int b[arraySize] = { 10, 20, 30, 40, 50 };
-    int c[arraySize] = { 0 };
-
-    // Add vectors in parallel.
-    cudaError_t cudaStatus = addWithCuda(c, a, b, arraySize);
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "addWithCuda failed!");
-        return 1;
-    }
-
-    printf("{1,2,3,4,5} + {10,20,30,40,50} = {%d,%d,%d,%d,%d}\n",
-        c[0], c[1], c[2], c[3], c[4]);
-
-    // cudaDeviceReset must be called before exiting in order for profiling and
-    // tracing tools such as Nsight and Visual Profiler to show complete traces.
-    cudaStatus = cudaDeviceReset();
-    if (cudaStatus != cudaSuccess) {
-        fprintf(stderr, "cudaDeviceReset failed!");
-        return 1;
-    }
-
-    return 0;
-}
-
 
 int * ImageAnalyserParallel::ComputeHistogram()
 {
@@ -246,69 +213,6 @@ Error:
 
 	return 0;
 }
-
-
-
-
-
-
-// Helper function for using CUDA to add vectors in parallel.
-cudaError_t addWithCuda(int *c, const int *a, const int *b, unsigned int size)
-{
-return (cudaError_t)0;
-}
-//    int *dev_a = 0;
-//    int *dev_b = 0;
-//    int *dev_c = 0;
-//    cudaError_t cudaStatus;
-//
-//    // Choose which GPU to run on, change this on a multi-GPU system.
-//	cudaStatus = InitializeDevice();
-//	if(cudaStatus != cudaSuccess)
-//		return cudaStatus;
-//
-//	dev_c = allocatecudaMemory(c, size, false);
-//	dev_a = allocatecudaMemory(a, size, true);
-//	dev_b = allocatecudaMemory(b, size, true);
-//
-//
-//    // Launch a kernel on the GPU with one thread for each element.
-//    addKernel<<< 1, size>>>(dev_c, dev_a, dev_b);
-//
-//    // Check for any errors launching the kernel
-//    cudaStatus = cudaGetLastError();
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "addKernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
-//        goto Error;
-//    }
-//    
-//    // cudaDeviceSynchronize waits for the kernel to finish, and returns
-//    // any errors encountered during the launch.
-//    cudaStatus = cudaDeviceSynchronize();
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
-//        goto Error;
-//    }
-//
-//    // Copy output vector from GPU buffer to host memory.
-//    cudaStatus = cudaMemcpy(c, dev_c, size * sizeof(int), cudaMemcpyDeviceToHost);
-//    if (cudaStatus != cudaSuccess) {
-//        fprintf(stderr, "cudaMemcpy failed!");
-//        goto Error;
-//    }
-//
-//Error:
-//    cudaFree(dev_c);
-//    cudaFree(dev_a);
-//    cudaFree(dev_b);
-//    
-//    return cudaStatus;
-//}
-
-
-
-
-
 
 
 

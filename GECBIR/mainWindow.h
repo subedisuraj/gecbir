@@ -17,7 +17,7 @@ namespace GECBIR {
 	using namespace System::Data;
 	using namespace System::Drawing;
 	using std::string;
-	int addcuda();
+
 
 	/// <summary>
 	/// Main window of the GECBIR Program 
@@ -616,7 +616,7 @@ namespace GECBIR {
 
 
 	private: System::Void button1_Click(System::Object^  sender, System::EventArgs^  e) {
-				 addcuda();
+		
 			 }
 
 
@@ -761,7 +761,7 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 
 		 }
 private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
-			 addcuda();
+		
 		 }
 };
 
