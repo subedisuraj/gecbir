@@ -78,10 +78,6 @@ __global__ void histo_kernel(uchar3* d_Imgdata, int3* d_histo , unsigned int dat
 	int idx = blockDim.x * blockIdx.x + threadIdx.x;
 	if(idx < data_size)
 	{
-	d_histo[idx].x = 0;
-	d_histo[idx].y = 0;
-	d_histo[idx].z = 0;
-	__syncthreads();
 	atomicAdd(&(d_histo[d_Imgdata[idx].x].x),(int)1);
 	atomicAdd(&(d_histo[d_Imgdata[idx].y].y),(int)1);
 	atomicAdd(&(d_histo[d_Imgdata[idx].z].z),(int)1);
@@ -90,7 +86,17 @@ __global__ void histo_kernel(uchar3* d_Imgdata, int3* d_histo , unsigned int dat
 
 }
 
-
+__global__ void histo_equal(uchar3 * d_thisImage, uchar3 * d_otherImage, bool * d_equalPixels, unsigned int data_size )
+{
+	int idx = blockDim.x * blockIdx.x + threadIdx.x;
+	if(idx<data_size)
+	{
+		if(d_thisImage[idx].x ==  d_otherImage[idx].x && d_thisImage[idx].y ==  d_otherImage[idx].y && d_thisImage[idx].z ==  d_otherImage[idx].z  )
+			d_equalPixels[idx] = 1;
+		else 
+			d_equalPixels[idx] = 0;
+	}
+}
 
 double3 findBhattacharyaDistance(int3 * hist1, int3 * hist2)
 {
@@ -133,9 +139,6 @@ double3 findBhattacharyaDistance(int3 * hist1, int3 * hist2)
 
 	return score;
 }
-
-
-
 
 int * ImageAnalyserParallel::ComputeHistogram()
 {
@@ -220,13 +223,85 @@ bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherIm
 }
 
 
+
+
+
+
+
+
 bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage)
 {
-	/*otherImage.ComputeHistogram();
-	double3 similarityScore =  findBhattacharyaDistance(this->HistoData, otherImage.HistoData);
-	if(similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL)
-		return true;*/
+	uchar3 * d_thisImage;
+	uchar3 * d_otherImage;
+	bool * d_equalPixels;
+	
+	
+
+	cudaError_t cudaStatus;
+
+	cudaStatus = InitializeDevice();
+	if(cudaStatus != cudaSuccess)
+		return 0;
+
+	unsigned int data_size = this->size_of_data;
+
+	bool * equalPixels;
+	equalPixels = new bool[data_size];
+
+	d_thisImage = allocatecudaMemoryUchar3(this->PixelData,this->size_of_data,true);
+	d_otherImage = allocatecudaMemoryUchar3(otherImage.PixelData,otherImage.size_of_data,true);
+
+	cudaStatus = cudaMalloc((void**)&d_equalPixels, data_size * sizeof(bool));
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMalloc failed!");
+		return 0;
+    }
+
+	
+
+	int nThreads = HISTOGRAM_BINS_SIZE;
+	int nBlocks = (data_size % nThreads == 0)?data_size/ nThreads: data_size/ nThreads+ 1;
+	
+	histo_equal<<<nBlocks,nThreads>>>(d_thisImage, d_otherImage, d_equalPixels, data_size ); 
+
+
+    // Check for any errors launching the kernel
+    cudaStatus = cudaGetLastError();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "Kernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
+        goto Error;
+    }
+    
+    cudaStatus = cudaDeviceSynchronize();
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
+        goto Error;
+    }
+
+	
+    // Copy output vector from GPU buffer to host memory.
+	cudaStatus = cudaMemcpy(equalPixels, d_equalPixels, data_size * sizeof(bool), cudaMemcpyDeviceToHost);
+    if (cudaStatus != cudaSuccess) {
+        fprintf(stderr, "cudaMemcpy failed!");
+        goto Error;
+    }
+
+	long int sumEquals =0;
+	for(int i =0 ;i<data_size ; i++)
+	{
+		sumEquals += equalPixels[i];
+	}
+
+	if(data_size - sumEquals <=20)
+		return true;
 	return false;
+
+Error:
+	cudaFree(d_equalPixels);
+	cudaFree(d_thisImage);
+	cudaFree(d_otherImage);
+
+	return 0;
 }
 
 }

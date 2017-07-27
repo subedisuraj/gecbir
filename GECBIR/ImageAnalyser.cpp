@@ -42,7 +42,6 @@ void ImageAnalyser::DisplayImage()
 
 bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 {
-#ifndef RUN_PARALLEL
 	ImageAnalyser otherImg = ImageAnalyser(ImageInfo("",OtherImagePath));
 	int R = this->ImageData.rows;
 	int C = this->ImageData.rows;
@@ -59,11 +58,6 @@ bool ImageAnalyser::CompareImageEquality(string OtherImagePath)
 		}
 	}
 	return true;
-
-#else
-	return false; 
-#endif
-
 }
 
 bool ImageAnalyser::CompareImageSimilarity(string OtherImagePath)

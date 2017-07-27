@@ -1,4 +1,6 @@
 #pragma once
+#pragma comment(linker, "/STACK:2000000")
+#pragma comment(linker, "/HEAP:2000000")
 
 #include "Workspace.h"
 #include <msclr\marshal_cppstd.h>

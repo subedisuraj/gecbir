@@ -12,9 +12,7 @@
 #define IMAGE_SIZE 512
 #define SIMILARITY_TOLERANCE 0.75 //value between 0 and 1
 
-#ifndef RUN_PARALLEL
-//#define RUN_PARALLEL
-#endif
+
 
 namespace GECBIR{
 
