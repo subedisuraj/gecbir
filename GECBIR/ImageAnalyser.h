@@ -10,7 +10,7 @@
 #include "Workspace.h"
 
 #define IMAGE_SIZE 512
-#define SIMILARITY_TOLERANCE 0.75 //value between 0 and 1
+#define SIMILARITY_TOLERANCE 0.85 //value between 0 and 1 0= most similar
 
 
 
@@ -32,6 +32,7 @@ public:
 	ImageAnalyser(){};
 	IplImage * ResizeImage(IplImage * source);
 	ImageAnalyser(ImageInfo imginf);
+	bool ImageAnalyser::CompareImageSimilarityCustom(string OtherImagePath);
 	bool CompareImageEquality(string OtherImagePath);
 	bool CompareImageSimilarity(string OtherImagePath);
 	vector<ImageInfo> findDuplicates(); 

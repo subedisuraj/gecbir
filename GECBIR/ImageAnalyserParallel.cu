@@ -106,7 +106,7 @@ namespace GECBIR{
 
 
 
-	double3 findBhattacharyaDistance(int3 * hist1, int3 * hist2)
+	double3 findBhattacharyaDistanceParallel(int3 * hist1, int3 * hist2)
 	{
 		int3 sum1 ={0,0,0};
 		int3 sum2 = {0,0,0}; 
@@ -224,7 +224,7 @@ Error:
 	bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImage)
 	{
 		otherImage.ComputeHistogram();
-		double3 similarityScore =  findBhattacharyaDistance(this->HistoData, otherImage.HistoData);
+		double3 similarityScore =  findBhattacharyaDistanceParallel(this->HistoData, otherImage.HistoData);
 		if(similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL || similarityScore.x < SIMILARITY_TOLERANCE_PARALLEL)
 			return true;
 		return false;

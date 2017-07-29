@@ -9,6 +9,11 @@
 #include "ImageAnalyser.h"
 #include "ImageAnalyserParallel.h"
 #include <stdio.h>
+#include <ctime>
+#include <chrono>
+
+using namespace std::chrono;
+
 
 namespace GECBIR {
 
@@ -41,6 +46,10 @@ namespace GECBIR {
 				delete components;
 			}
 		}
+
+
+	public : static bool RUN_PARALLEL; 
+
 	private: System::Windows::Forms::Panel^  mainPanel;
 	protected: 
 	private: System::Windows::Forms::Button^  imageBtn;
@@ -73,7 +82,9 @@ namespace GECBIR {
 
 	private: System::Windows::Forms::FlowLayoutPanel^  auxDisplayPanel;
 	private: System::Windows::Forms::Label^  loadDuplicatesLabel;
-	private: System::Windows::Forms::Button^  button1;
+
+	private: System::Windows::Forms::Label^  timetakenLabel;
+
 
 
 
@@ -107,11 +118,11 @@ namespace GECBIR {
 			this->imageOptionsPanel = (gcnew System::Windows::Forms::Panel());
 			this->auxDisplayPanel = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->loadDuplicatesLabel = (gcnew System::Windows::Forms::Label());
+			this->timetakenLabel = (gcnew System::Windows::Forms::Label());
 			this->flowLayoutPanel1 = (gcnew System::Windows::Forms::FlowLayoutPanel());
 			this->deleteBtn = (gcnew System::Windows::Forms::Button());
 			this->findduplicateBtn = (gcnew System::Windows::Forms::Button());
 			this->findSimilarBtn = (gcnew System::Windows::Forms::Button());
-			this->button1 = (gcnew System::Windows::Forms::Button());
 			this->settingsBtnLabel = (gcnew System::Windows::Forms::Label());
 			this->imageBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtn = (gcnew System::Windows::Forms::Button());
@@ -225,6 +236,7 @@ namespace GECBIR {
 			// 
 			this->auxDisplayPanel->AutoScroll = true;
 			this->auxDisplayPanel->Controls->Add(this->loadDuplicatesLabel);
+			this->auxDisplayPanel->Controls->Add(this->timetakenLabel);
 			this->auxDisplayPanel->Dock = System::Windows::Forms::DockStyle::Fill;
 			this->auxDisplayPanel->Location = System::Drawing::Point(0, 59);
 			this->auxDisplayPanel->Name = L"auxDisplayPanel";
@@ -242,6 +254,17 @@ namespace GECBIR {
 			this->loadDuplicatesLabel->TabIndex = 0;
 			this->loadDuplicatesLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
 			// 
+			// timetakenLabel
+			// 
+			this->timetakenLabel->AutoSize = true;
+			this->timetakenLabel->Dock = System::Windows::Forms::DockStyle::Fill;
+			this->timetakenLabel->Location = System::Drawing::Point(179, 0);
+			this->timetakenLabel->Name = L"timetakenLabel";
+			this->timetakenLabel->Padding = System::Windows::Forms::Padding(120, 20, 50, 5);
+			this->timetakenLabel->Size = System::Drawing::Size(170, 38);
+			this->timetakenLabel->TabIndex = 1;
+			this->timetakenLabel->TextAlign = System::Drawing::ContentAlignment::MiddleCenter;
+			// 
 			// flowLayoutPanel1
 			// 
 			this->flowLayoutPanel1->AutoSize = true;
@@ -249,7 +272,6 @@ namespace GECBIR {
 			this->flowLayoutPanel1->Controls->Add(this->deleteBtn);
 			this->flowLayoutPanel1->Controls->Add(this->findduplicateBtn);
 			this->flowLayoutPanel1->Controls->Add(this->findSimilarBtn);
-			this->flowLayoutPanel1->Controls->Add(this->button1);
 			this->flowLayoutPanel1->Dock = System::Windows::Forms::DockStyle::Top;
 			this->flowLayoutPanel1->Location = System::Drawing::Point(0, 0);
 			this->flowLayoutPanel1->Margin = System::Windows::Forms::Padding(15);
@@ -287,16 +309,6 @@ namespace GECBIR {
 			this->findSimilarBtn->Text = L"Find Similar";
 			this->findSimilarBtn->UseVisualStyleBackColor = true;
 			this->findSimilarBtn->Click += gcnew System::EventHandler(this, &mainWindow::findSimilarBtn_Click);
-			// 
-			// button1
-			// 
-			this->button1->Location = System::Drawing::Point(297, 18);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 1;
-			this->button1->Text = L"cuda";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &mainWindow::button1_Click_1);
 			// 
 			// settingsBtnLabel
 			// 
@@ -485,6 +497,7 @@ namespace GECBIR {
 		{
 			InitializeComponent();
 			refreshMainWindow();
+			RUN_PARALLEL = false;
 			//TODO: Add the constructor code here
 			//
 		}
@@ -691,6 +704,12 @@ namespace GECBIR {
 
 	private: System::Void findduplicateBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 
+
+
+		
+				  high_resolution_clock::time_point t1 = high_resolution_clock::now();
+
+
 				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
 				 auxDisplayPanel->Controls->Clear();
 				 int dupImageCount = 0;
@@ -707,6 +726,14 @@ namespace GECBIR {
 					 dupImageCount += dupImages.size();
 					
 				 }
+
+				 high_resolution_clock::time_point t2 = high_resolution_clock::now();
+				 auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+
+				 double seconds = duration / 1000000.0; 
+				 
+				 timetakenLabel->Text = "Time taken: " + seconds.ToString() + " seconds.";
+				 auxDisplayPanel->Controls->Add(timetakenLabel);
 				 if(!dupImageCount)
 				 {
 					 loadDuplicatesLabel->Text = "No duplicate images found.";
@@ -732,6 +759,13 @@ namespace GECBIR {
 
 
 private: System::Void findSimilarBtn_Click(System::Object^  sender, System::EventArgs^  e) {
+			  
+				
+				
+
+				 high_resolution_clock::time_point t1 = high_resolution_clock::now();
+ 
+  
 				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
 				 auxDisplayPanel->Controls->Clear();
 				 int dupImageCount = 0;
@@ -748,6 +782,16 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 					 dupImageCount += dupImages.size();
 					
 				 }
+
+
+				 high_resolution_clock::time_point t2 = high_resolution_clock::now();
+				 auto duration = duration_cast<microseconds>( t2 - t1 ).count();
+
+				 double seconds = duration / 1000000.0; 
+				 
+				 timetakenLabel->Text = "Time taken: " + seconds.ToString() + " seconds.";
+				 auxDisplayPanel->Controls->Add(timetakenLabel);
+
 				 if(!dupImageCount)
 				 {
 					 loadDuplicatesLabel->Text = "No similar images found.";
@@ -755,6 +799,29 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 				 }
 
 		 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs^  e) {
 		
 			  using namespace cv;
@@ -764,6 +831,13 @@ private: System::Void button1_Click_1(System::Object^  sender, System::EventArgs
 			  uchar3 *Cdata = (uchar3 *)C.data;
 			  ImageAnalyserParallel a = ImageAnalyserParallel(Cdata, 9);
 			  a.ComputeHistogram();
+		 }
+
+
+private: System::Void checkBox1_CheckedChanged(System::Object^  sender, System::EventArgs^  e) {
+
+			
+
 		 }
 };
 
