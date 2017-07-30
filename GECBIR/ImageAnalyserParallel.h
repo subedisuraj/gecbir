@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include "ImageInfo.h"
-//#include "Workspace.h"
+//#include "ImageAnalyser.h"
 
 #define SIMILARITY_TOLERANCE_PARALLEL 0.35 
 #define HISTOGRAM_BINS_SIZE 512
@@ -25,6 +25,8 @@ public:
 	uchar3* PixelData;
 	int3 * HistoData;
 	unsigned int size_of_data; //No of pixels
+	static vector<ImageInfo>  allImages;
+
 
 public:
 
@@ -33,6 +35,7 @@ public:
 	int * ComputeHistogram();
 	bool ImageAnalyserParallel::CompareImageSimilarity(ImageAnalyserParallel otherImage);
 	bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage);
+	static vector<vector<ImageInfo > > ImageAnalyserParallel::CompareImageEqualityOpt(vector<string> selectedImagesList);
 };
 
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "Workspace.h"
+
 #include<string>
 #include <cv.h>
 #include <iostream>
@@ -7,8 +7,10 @@
 #include <opencv\highgui.h>
 #include <vector>
 #include <set>
-#include "Workspace.h"
+#include "ImageAnalyserParallel.h"
 
+
+#define RUN_PARALLEL
 #define IMAGE_SIZE 512
 #define SIMILARITY_TOLERANCE 0.85 //value between 0 and 1 0= most similar
 
@@ -26,6 +28,7 @@ class ImageAnalyser
 {
 public: ImageInfo imagefile;
 		 Mat ImageData;
+		 
 
 public:
 	void Sample(void);

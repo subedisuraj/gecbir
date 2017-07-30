@@ -9,13 +9,16 @@ class ImageInfo
 public:
 	string ImageName;
 	string ImagePath;
-	string ImageID;
+	int ImageID;
+	static int IDGenerator;
 
 	ImageInfo(){};
 	ImageInfo(string imgName, string imgPath)
 	{
 		ImageName = imgName;
 		ImagePath = imgPath;
+		ImageID = IDGenerator;
+		IDGenerator++;
 	}
 };
 }

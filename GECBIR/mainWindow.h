@@ -12,6 +12,7 @@
 #include <ctime>
 #include <chrono>
 
+#define RUN_PARALLEL
 using namespace std::chrono;
 
 
@@ -48,20 +49,20 @@ namespace GECBIR {
 		}
 
 
-	public : static bool RUN_PARALLEL; 
+	//public : static bool RUN_PARALLEL; 
 
 	private: System::Windows::Forms::Panel^  mainPanel;
 	protected: 
 	private: System::Windows::Forms::Button^  imageBtn;
 	private: System::Windows::Forms::Label^  imageBtnLabel;
-	private: System::Windows::Forms::Label^  similarBtnLabel;
 
 
-	private: System::Windows::Forms::Label^  duplicatesBtnLabel;
-	private: System::Windows::Forms::Button^  similarBtn;
 
 
-	private: System::Windows::Forms::Button^  duplicatesBtn;
+
+
+
+
 	private: System::Windows::Forms::Label^  foldersbtnLabel;
 
 	private: System::Windows::Forms::Button^  foldersBtn;
@@ -127,10 +128,6 @@ namespace GECBIR {
 			this->imageBtn = (gcnew System::Windows::Forms::Button());
 			this->settingsBtn = (gcnew System::Windows::Forms::Button());
 			this->imageBtnLabel = (gcnew System::Windows::Forms::Label());
-			this->similarBtnLabel = (gcnew System::Windows::Forms::Label());
-			this->duplicatesBtnLabel = (gcnew System::Windows::Forms::Label());
-			this->similarBtn = (gcnew System::Windows::Forms::Button());
-			this->duplicatesBtn = (gcnew System::Windows::Forms::Button());
 			this->foldersbtnLabel = (gcnew System::Windows::Forms::Label());
 			this->foldersBtn = (gcnew System::Windows::Forms::Button());
 			this->titleBarPanel = (gcnew System::Windows::Forms::Panel());
@@ -159,10 +156,6 @@ namespace GECBIR {
 			this->mainPanel->Controls->Add(this->imageBtn);
 			this->mainPanel->Controls->Add(this->settingsBtn);
 			this->mainPanel->Controls->Add(this->imageBtnLabel);
-			this->mainPanel->Controls->Add(this->similarBtnLabel);
-			this->mainPanel->Controls->Add(this->duplicatesBtnLabel);
-			this->mainPanel->Controls->Add(this->similarBtn);
-			this->mainPanel->Controls->Add(this->duplicatesBtn);
 			this->mainPanel->Controls->Add(this->foldersbtnLabel);
 			this->mainPanel->Controls->Add(this->foldersBtn);
 			this->mainPanel->Controls->Add(this->titleBarPanel);
@@ -313,7 +306,7 @@ namespace GECBIR {
 			// settingsBtnLabel
 			// 
 			this->settingsBtnLabel->AutoSize = true;
-			this->settingsBtnLabel->Location = System::Drawing::Point(15, 430);
+			this->settingsBtnLabel->Location = System::Drawing::Point(15, 263);
 			this->settingsBtnLabel->Name = L"settingsBtnLabel";
 			this->settingsBtnLabel->Size = System::Drawing::Size(45, 13);
 			this->settingsBtnLabel->TabIndex = 11;
@@ -334,7 +327,7 @@ namespace GECBIR {
 			// 
 			this->settingsBtn->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
 			this->settingsBtn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"settingsBtn.Image")));
-			this->settingsBtn->Location = System::Drawing::Point(11, 379);
+			this->settingsBtn->Location = System::Drawing::Point(11, 212);
 			this->settingsBtn->Name = L"settingsBtn";
 			this->settingsBtn->Size = System::Drawing::Size(52, 51);
 			this->settingsBtn->TabIndex = 10;
@@ -349,45 +342,6 @@ namespace GECBIR {
 			this->imageBtnLabel->Size = System::Drawing::Size(41, 13);
 			this->imageBtnLabel->TabIndex = 13;
 			this->imageBtnLabel->Text = L"Images";
-			// 
-			// similarBtnLabel
-			// 
-			this->similarBtnLabel->AutoSize = true;
-			this->similarBtnLabel->Location = System::Drawing::Point(14, 352);
-			this->similarBtnLabel->Name = L"similarBtnLabel";
-			this->similarBtnLabel->Size = System::Drawing::Size(37, 13);
-			this->similarBtnLabel->TabIndex = 9;
-			this->similarBtnLabel->Text = L"Similar";
-			// 
-			// duplicatesBtnLabel
-			// 
-			this->duplicatesBtnLabel->AutoSize = true;
-			this->duplicatesBtnLabel->Location = System::Drawing::Point(8, 269);
-			this->duplicatesBtnLabel->Name = L"duplicatesBtnLabel";
-			this->duplicatesBtnLabel->Size = System::Drawing::Size(57, 13);
-			this->duplicatesBtnLabel->TabIndex = 11;
-			this->duplicatesBtnLabel->Text = L"Duplicates";
-			// 
-			// similarBtn
-			// 
-			this->similarBtn->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->similarBtn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"similarBtn.Image")));
-			this->similarBtn->Location = System::Drawing::Point(10, 301);
-			this->similarBtn->Name = L"similarBtn";
-			this->similarBtn->Size = System::Drawing::Size(52, 51);
-			this->similarBtn->TabIndex = 8;
-			this->similarBtn->UseVisualStyleBackColor = true;
-			// 
-			// duplicatesBtn
-			// 
-			this->duplicatesBtn->AutoSizeMode = System::Windows::Forms::AutoSizeMode::GrowAndShrink;
-			this->duplicatesBtn->Image = (cli::safe_cast<System::Drawing::Image^  >(resources->GetObject(L"duplicatesBtn.Image")));
-			this->duplicatesBtn->Location = System::Drawing::Point(10, 218);
-			this->duplicatesBtn->Name = L"duplicatesBtn";
-			this->duplicatesBtn->Size = System::Drawing::Size(52, 51);
-			this->duplicatesBtn->TabIndex = 10;
-			this->duplicatesBtn->UseVisualStyleBackColor = true;
-			this->duplicatesBtn->Click += gcnew System::EventHandler(this, &mainWindow::duplicatesBtn_Click);
 			// 
 			// foldersbtnLabel
 			// 
@@ -497,7 +451,6 @@ namespace GECBIR {
 		{
 			InitializeComponent();
 			refreshMainWindow();
-			RUN_PARALLEL = false;
 			//TODO: Add the constructor code here
 			//
 		}
@@ -704,15 +657,30 @@ namespace GECBIR {
 
 	private: System::Void findduplicateBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 
-
-
-		
-				  high_resolution_clock::time_point t1 = high_resolution_clock::now();
-
-
-				 vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
+				 high_resolution_clock::time_point t1 = high_resolution_clock::now();
+				  vector<string> selectedImagesList = ImageBox::getSelectionListVector(ImageBox::selectionList);
 				 auxDisplayPanel->Controls->Clear();
 				 int dupImageCount = 0;
+
+#ifdef RUN_PARALLEL
+				 vector<ImageInfo >& allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+				 ImageAnalyserParallel::allImages = allImagesinCurGallery;
+				 vector<vector<ImageInfo > > duplicateImages = ImageAnalyserParallel::CompareImageEqualityOpt(selectedImagesList);
+				  for(int i=0; i<duplicateImages.size(); i++)
+				 { 
+					  vector<ImageInfo > dupImages = duplicateImages[i];
+				 if(dupImages.size()>0)
+					 {
+						 LoadDuplicateImages("", dupImages, auxDisplayPanel);
+					 }
+					 dupImageCount += dupImages.size();
+				  }
+
+#else
+				  
+
+
+				
 				 for(int i=0; i<selectedImagesList.size(); i++)
 				 {
 					 ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
@@ -727,6 +695,7 @@ namespace GECBIR {
 					
 				 }
 
+#endif
 				 high_resolution_clock::time_point t2 = high_resolution_clock::now();
 				 auto duration = duration_cast<microseconds>( t2 - t1 ).count();
 

@@ -1,7 +1,9 @@
 #include "ImageAnalyserParallel.h"
-
+#include <map>
+#include "ImageAnalyser.h"
 
 #define NUM_BANKS 16
+#define IMAGE_SIZE 512
 
 namespace GECBIR{
 
@@ -253,7 +255,7 @@ Error:
 	}
 
 
-	bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage)
+bool ImageAnalyserParallel::CompareImageEquality(ImageAnalyserParallel otherImage)
 	{
 		uchar3 * d_thisImage;
 		uchar3 * d_otherImage;
@@ -306,7 +308,7 @@ Error:
 		//int * d_intPixels =  (int*) d_equalPixels;
 		long * d_prefixSum;
 		long * prefixSum = new long[HISTOGRAM_BINS_SIZE];
-	
+
 
 		cudaStatus = cudaMalloc((void**)&d_prefixSum, HISTOGRAM_BINS_SIZE * sizeof(long));
 		if (cudaStatus != cudaSuccess) {
@@ -319,7 +321,7 @@ Error:
 
 		nThreads /= 2;
 
-	
+
 
 		pixel_equal<<<1,nThreads, shared_mem_size>>>(d_equalPixels, d_prefixSum, HISTOGRAM_BINS_SIZE ); 
 		cudaStatus = cudaMemcpy(prefixSum, d_prefixSum , HISTOGRAM_BINS_SIZE * sizeof(long), cudaMemcpyDeviceToHost);
@@ -327,7 +329,7 @@ Error:
 			fprintf(stderr, "cudaMemcpy failed!");
 			goto Error;
 		}
-			
+
 
 		if(prefixSum[255]>=240)
 		{
@@ -353,6 +355,146 @@ Error:
 		cudaFree(d_otherImage);
 
 		return 0;
+	}
+
+
+
+
+
+	vector<vector<ImageInfo > >  ImageAnalyserParallel::CompareImageEqualityOpt(vector<string> selectedImagesList)
+	{
+
+		vector<vector<ImageInfo > > dupImages = vector<vector<ImageInfo> >();
+		
+		unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+		std::map<int, int> hashtable;
+		uchar3 * d_thisImage;
+		uchar3* * d_otherImage;
+		int * d_equalPixels;
+		d_otherImage = new uchar3*[allImages.size()];
+
+
+		cudaError_t cudaStatus;
+		cudaStatus = InitializeDevice();
+		if(cudaStatus != cudaSuccess)
+			return dupImages;
+
+		cudaStatus = cudaMalloc((void**)&d_equalPixels, dataSize * sizeof(int));
+		if (cudaStatus != cudaSuccess) {
+			fprintf(stderr, "cudaMalloc failed!");
+			return dupImages;
+		}
+
+		for(int i=0; i<selectedImagesList.size(); i++)
+		{
+			vector<ImageInfo > dupImagesforSelected = vector<ImageInfo>();
+			ImageInfo imginf = ImageInfo("",selectedImagesList[i]);
+			ImageAnalyser thisImageObj = ImageAnalyser(imginf);
+			uchar3 * thisImageData =  (uchar3 *)(thisImageObj.ImageData.data);
+			ImageAnalyserParallel thisImage = ImageAnalyserParallel(thisImageData, dataSize);
+
+			
+
+			int * equalPixels;
+			equalPixels = new int[dataSize];
+
+			d_thisImage = allocatecudaMemoryUchar3(thisImage.PixelData,dataSize,true);
+
+			for(int i =0; i<allImages.size(); i++)
+			{
+				ImageAnalyser otherImageobj = ImageAnalyser(allImages[i]);
+				uchar3 * otherImageData =  (uchar3 *)(otherImageobj.ImageData.data);
+				ImageAnalyserParallel otherImage = ImageAnalyserParallel(otherImageData, dataSize);
+
+				if(thisImageObj.imagefile.ImagePath == otherImageobj.imagefile.ImagePath)
+					continue;
+
+				int a = allImages[i].ImageID;
+				if(hashtable.find(allImages[i].ImageID) == hashtable.end())
+				{
+					d_otherImage[allImages[i].ImageID] = allocatecudaMemoryUchar3(otherImage.PixelData,otherImage.size_of_data,true);
+					hashtable[allImages[i].ImageID] = allImages[i].ImageID;
+				}
+
+				int nThreads = HISTOGRAM_BINS_SIZE;
+				int nBlocks = (dataSize % nThreads == 0)?dataSize/ nThreads: dataSize/ nThreads+ 1;
+
+				image_equal<<<nBlocks,nThreads>>>(d_thisImage, d_otherImage[allImages[i].ImageID], d_equalPixels, dataSize ); 
+
+
+				// Check for any errors launching the kernel
+				cudaStatus = cudaGetLastError();
+				if (cudaStatus != cudaSuccess) {
+					fprintf(stderr, "Kernel launch failed: %s\n", cudaGetErrorString(cudaStatus));
+				//	goto Error;
+				}
+
+				cudaStatus = cudaDeviceSynchronize();
+				if (cudaStatus != cudaSuccess) {
+					fprintf(stderr, "cudaDeviceSynchronize returned error code %d after launching addKernel!\n", cudaStatus);
+				//	goto Error;
+				}
+
+				// Copy output vector from GPU buffer to host memory.
+				cudaStatus = cudaMemcpy(equalPixels, d_equalPixels, dataSize * sizeof(int), cudaMemcpyDeviceToHost);
+				if (cudaStatus != cudaSuccess) {
+					fprintf(stderr, "cudaMemcpy failed!");
+				//	goto Error;
+				}
+
+				//int * d_intPixels =  (int*) d_equalPixels;
+				long * d_prefixSum;
+				long * prefixSum = new long[HISTOGRAM_BINS_SIZE];
+
+
+				cudaStatus = cudaMalloc((void**)&d_prefixSum, HISTOGRAM_BINS_SIZE * sizeof(long));
+				if (cudaStatus != cudaSuccess) {
+					fprintf(stderr, "cudaMalloc failed!");
+					return dupImages;
+				}
+
+				unsigned int extra_space = HISTOGRAM_BINS_SIZE  / NUM_BANKS;
+				const unsigned int shared_mem_size = sizeof(long) *  (HISTOGRAM_BINS_SIZE + extra_space);
+
+				nThreads /= 2;
+
+
+
+				pixel_equal<<<1,nThreads, shared_mem_size>>>(d_equalPixels, d_prefixSum, HISTOGRAM_BINS_SIZE ); 
+				cudaStatus = cudaMemcpy(prefixSum, d_prefixSum , HISTOGRAM_BINS_SIZE * sizeof(long), cudaMemcpyDeviceToHost);
+				if (cudaStatus != cudaSuccess) {
+					fprintf(stderr, "cudaMemcpy failed!");
+				//	goto Error;
+				}
+
+
+				if(prefixSum[255]>=240)
+				{
+					dupImagesforSelected.push_back(allImages[i]);
+				}
+			}
+
+			dupImages.push_back(dupImagesforSelected);
+		}
+
+
+
+		//long int sumEquals =0;
+		//for(int i =0 ;i<data_size ; i++)
+		//{
+		//	sumEquals += equalPixels[i];
+		//}
+
+		//if(data_size - sumEquals <=20)
+		//	return true;
+		//return false;
+
+Error:
+		cudaFree(d_equalPixels);
+		cudaFree(d_thisImage);
+		cudaFree(d_otherImage);
+
+		return dupImages;
 	}
 
 }

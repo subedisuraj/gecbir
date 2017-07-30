@@ -1,12 +1,16 @@
 #include "ImageAnalyser.h"
 #include "Imagebox.h"
 #include "mainWindow.h"
+#include "Workspace.h"
 
-#define RUN_PARALLEL
+
 using namespace cv;
 using std::cout;
 
+
 namespace GECBIR {
+
+	vector<ImageInfo> ImageAnalyserParallel::allImages;
 	ImageAnalyser::ImageAnalyser(ImageInfo imginf)
 	{
 		this->imagefile = imginf;
@@ -201,7 +205,70 @@ namespace GECBIR {
 	{
 		vector<ImageInfo > dupImages = vector<ImageInfo>();
 		ImageAnalyser selectedImage = ImageAnalyser(this->imagefile);
-		vector<ImageInfo > &allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+		vector<ImageInfo >& allImagesinCurGallery =  mainWindow::currentWorkspace->allImagesinGallery;
+//
+//#ifdef RUN_PARALLEL_OPT
+//				for(int j = 0; j<mainWindow::currentWorkspace->allImagesinGallery.size(); j++)
+//		{
+//			string otherImageName = allImagesinCurGallery[j].ImageName; 
+//			string otherImageFullName = allImagesinCurGallery[j].ImagePath;
+//			if(selectedImage.imagefile.ImagePath != otherImageFullName )
+//			{
+//				bool equalImages = false;
+//				unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+//				uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+//				ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+//
+//				ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
+//				uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
+//				ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
+//				equalImages = selectedImageParallel.CompareImageEquality(otherImageParallel);
+//				if(equalImages)
+//				{
+//					dupImages.push_back(ImageInfo(otherImageName,otherImageFullName));
+//				}
+//			}
+//		}
+//
+//
+//
+//#endif
+//
+//
+//
+//
+//
+//
+//#ifdef RUN_PARALLEL
+//			
+//	     ImageAnalyserParallel::allImages = allImagesinCurGallery;
+//		 unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+//		 uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+//		 ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+//		// bool a = selectedImageParallel.CompareImageEqualityOpt();
+//
+//		//for(int j = 0; j<mainWindow::currentWorkspace->allImagesinGallery.size(); j++)
+//		//{
+//		//	string otherImageName = allImagesinCurGallery[j].ImageName; 
+//		//	string otherImageFullName = allImagesinCurGallery[j].ImagePath;
+//		//	if(selectedImage.imagefile.ImagePath != otherImageFullName )
+//		//	{
+//		//		bool equalImages = false;
+//		//		unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+//		//		uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+//		//		ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+//
+//		//		ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
+//		//		uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
+//		//		ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
+//		//		equalImages = selectedImageParallel.CompareImageEquality(otherImageParallel);
+//		//		if(equalImages)
+//		//		{
+//		//			dupImages.push_back(ImageInfo(otherImageName,otherImageFullName));
+//		//		}
+//		//	}
+//		//}
+//#else
 		for(int j = 0; j<mainWindow::currentWorkspace->allImagesinGallery.size(); j++)
 		{
 			string otherImageName = allImagesinCurGallery[j].ImageName; 
@@ -209,19 +276,8 @@ namespace GECBIR {
 			if(selectedImage.imagefile.ImagePath != otherImageFullName )
 			{
 				bool equalImages = false;
+				equalImages = selectedImage.CompareImageEquality(otherImageFullName);
 
-#ifdef RUN_PARALLEL
-				unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
-				uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
-				ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
-
-				ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
-				uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
-				ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
-				equalImages = selectedImageParallel.CompareImageEquality(otherImageParallel);
-#else
-					equalImages = selectedImage.CompareImageEquality(otherImageFullName);
-#endif
 
 
 				if(equalImages)
@@ -230,6 +286,7 @@ namespace GECBIR {
 				}
 			}
 		}
+//#endif
 		return dupImages;
 	}
 
@@ -248,18 +305,18 @@ namespace GECBIR {
 				bool similarImages = false;
 
 #ifdef RUN_PARALLEL
-					unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
-					uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
-					ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
-					selectedImageParallel.ComputeHistogram();
+				unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
+				uchar3 * imageData =  (uchar3 *)(selectedImage.ImageData.data);
+				ImageAnalyserParallel selectedImageParallel = ImageAnalyserParallel(imageData, dataSize);
+				selectedImageParallel.ComputeHistogram();
 
-					ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
-					uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
-					ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
-					similarImages = selectedImageParallel.CompareImageSimilarity(otherImageParallel);
+				ImageAnalyser otherImage = ImageAnalyser(ImageInfo("",otherImageFullName));
+				uchar3 * otherImageData =  (uchar3 *)(otherImage.ImageData.data);
+				ImageAnalyserParallel otherImageParallel = ImageAnalyserParallel(otherImageData, dataSize);
+				similarImages = selectedImageParallel.CompareImageSimilarity(otherImageParallel);
 #else
-	
-					similarImages = selectedImage.CompareImageSimilarityCustom(otherImageFullName);
+
+				similarImages = selectedImage.CompareImageSimilarityCustom(otherImageFullName);
 #endif
 
 				if(similarImages)

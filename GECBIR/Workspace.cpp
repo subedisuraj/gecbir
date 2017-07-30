@@ -12,6 +12,7 @@ using namespace System::IO;
 
 using std::vector;
 
+int ImageInfo::IDGenerator;
 
 String^ getManagedString(string unmanagedString);
 string getUnmanagedString(String^ managedString);
@@ -23,6 +24,7 @@ Workspace::Workspace(void)
 	DirectoryInfo^ dir = gcnew DirectoryInfo(getManagedString(galleryPath));
 	galleryFolderName = getUnmanagedString( dir->Name);
 	getImageListsinGallery(dir->Name, dir->FullName);
+	ImageInfo::IDGenerator = -1;
 	allImagesinGallery = getAllImageLists();
 
 }
