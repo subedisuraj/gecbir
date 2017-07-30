@@ -1,7 +1,7 @@
 #include "ImageAnalyserParallel.h"
 #include <map>
 #include "ImageAnalyser.h"
-
+#include "cuda_profiler_api.h"
 #define NUM_BANKS 16
 #define IMAGE_SIZE 512
 
@@ -363,7 +363,9 @@ Error:
 
 	vector<vector<ImageInfo > >  ImageAnalyserParallel::CompareImageEqualityOpt(vector<string> selectedImagesList)
 	{
+	
 
+		cudaProfilerStart();
 		vector<vector<ImageInfo > > dupImages = vector<vector<ImageInfo> >();
 		
 		unsigned int dataSize = IMAGE_SIZE * IMAGE_SIZE;
@@ -494,6 +496,7 @@ Error:
 		cudaFree(d_thisImage);
 		cudaFree(d_otherImage);
 
+		cudaProfilerStop();
 		return dupImages;
 	}
 

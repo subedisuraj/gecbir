@@ -8,6 +8,7 @@
 #include "ImageBox.h"
 #include "ImageAnalyser.h"
 #include "ImageAnalyserParallel.h"
+#include "cuda_profiler_api.h"
 #include <stdio.h>
 #include <ctime>
 #include <chrono>
@@ -729,9 +730,8 @@ namespace GECBIR {
 
 private: System::Void findSimilarBtn_Click(System::Object^  sender, System::EventArgs^  e) {
 			  
-				
-				
-
+				cudaProfilerStart();
+			     
 				 high_resolution_clock::time_point t1 = high_resolution_clock::now();
  
   
@@ -752,7 +752,7 @@ private: System::Void findSimilarBtn_Click(System::Object^  sender, System::Even
 					
 				 }
 
-
+				 cudaProfilerStop();
 				 high_resolution_clock::time_point t2 = high_resolution_clock::now();
 				 auto duration = duration_cast<microseconds>( t2 - t1 ).count();
 

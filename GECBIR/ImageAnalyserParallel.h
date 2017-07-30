@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include "ImageInfo.h"
+
 //#include "ImageAnalyser.h"
 
 #define SIMILARITY_TOLERANCE_PARALLEL 0.35 
